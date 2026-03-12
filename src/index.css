@@ -1,0 +1,31 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: var(--primary);
+  --color-primary-dark: var(--primary-dark);
+  --color-primary-light: var(--primary-light);
+  --color-secondary: var(--secondary);
+  --color-accent: var(--accent);
+  --color-background-site: var(--background);
+  --color-surface: var(--surface);
+  --color-text-pri: var(--text-primary);
+  --color-text-sec: var(--text-secondary);
+  --color-gray-light: var(--gray-light);
+  --color-gray-medium: var(--gray-medium);
+  --color-gray-dark: var(--gray-dark);
+}
+
+:root {
+  --primary: #7c3aed;          /* Default Main brand color */
+  --primary-dark: #5b21b6;
+  --primary-light: #a78bfa;
+  --secondary: #10b981;        /* Default Accent / success color */
+  --accent: #ec4899;
+  --background: #ffffff;       /* Main page background */
+  --surface: #f9fafb;          /* Cards, sections */
+  --text-primary: #111827;     /* Main text */
+  --text-secondary: #4b5563;   /* Subtle text */
+  --gray-light: #f3f4f6;
+  --gray-medium: #9ca3af;
+  --gray-dark: #374151;
+}
