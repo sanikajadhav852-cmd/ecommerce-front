@@ -79,10 +79,10 @@ export default function Checkout() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: 'var(--background, #ffffff)' }}>
+      <div className="min-h-screen flex items-center justify-center bg-background dark:bg-slate-950 transition-colors">
         <div className="flex flex-col items-center gap-4">
           <Loader />
-          <p className="font-medium" style={{ color: 'var(--text-secondary, #6b7280)' }}>
+          <p className="font-medium text-text-sec dark:text-slate-400">
             Preparing checkout...
           </p>
         </div>
@@ -92,15 +92,14 @@ export default function Checkout() {
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center px-6" style={{ backgroundColor: 'var(--background, #ffffff)' }}>
+      <div className="min-h-screen flex items-center justify-center px-6 bg-background dark:bg-slate-950 transition-colors">
         <div className="text-center max-w-md">
-          <h2 className="text-2xl font-bold mb-4" style={{ color: 'var(--text-primary, #111827)' }}>
+          <h2 className="text-2xl font-bold mb-4 text-text-pri dark:text-slate-50">
             {error}
           </h2>
           <Link 
             to="/cart" 
-            className="inline-flex items-center gap-2 font-medium hover:underline transition-colors"
-            style={{ color: 'var(--primary, #7c3aed)' }}
+            className="inline-flex items-center gap-2 font-medium hover:underline transition-colors text-primary dark:text-primary-light"
           >
             <ArrowLeft size={20} /> Back to Cart
           </Link>
@@ -110,34 +109,27 @@ export default function Checkout() {
   }
 
   return (
-    <div className="min-h-screen py-12" style={{ backgroundColor: 'var(--background, #ffffff)' }}>
+    <div className="min-h-screen py-12 bg-background dark:bg-slate-950 transition-colors">
       <div className="max-w-7xl mx-auto px-6">
-        <h1 className="text-3xl md:text-4xl font-bold mb-10" style={{ color: 'var(--text-primary, #111827)' }}>
+        <h1 className="text-3xl md:text-4xl font-bold mb-10 text-text-pri dark:text-slate-50">
           Checkout
         </h1>
 
         <div className="grid md:grid-cols-2 gap-12">
           {/* Left - Address & Summary */}
           <div>
-            <h2 className="text-2xl font-semibold mb-6" style={{ color: 'var(--text-primary, #111827)' }}>
+            <h2 className="text-2xl font-semibold mb-6 text-text-pri dark:text-slate-50">
               Delivery Address
             </h2>
 
             {addresses.length === 0 ? (
-              <div className="p-6 rounded-lg text-center border" style={{
-                backgroundColor: 'var(--gray-light, #f3f4f6)',
-                borderColor: 'var(--gray-medium, #9ca3af)',
-              }}>
-                <p className="mb-4 font-medium" style={{ color: 'var(--text-secondary, #6b7280)' }}>
+              <div className="p-6 rounded-lg text-center border bg-gray-50 dark:bg-slate-900 border-gray-200 dark:border-slate-800">
+                <p className="mb-4 font-medium text-text-sec dark:text-slate-400">
                   No addresses found
                 </p>
                 <button
                   onClick={() => navigate('/profile')} // or a modal to add address
-                  className="px-6 py-3 rounded-lg font-medium transition-all"
-                  style={{
-                    backgroundColor: 'var(--primary, #7c3aed)',
-                    color: 'white',
-                  }}
+                  className="px-6 py-3 rounded-lg font-medium transition-all bg-primary dark:bg-primary-light text-white dark:text-slate-900"
                 >
                   Add New Address
                 </button>
@@ -148,31 +140,24 @@ export default function Checkout() {
                   <div
                     key={addr.id}
                     onClick={() => setSelectedAddressId(addr.id)}
-                    className={`p-6 border rounded-lg cursor-pointer transition-all ${
-                      selectedAddressId === addr.id ? 'border-2 shadow-md' : 'hover:shadow'
+                    className={`p-6 border rounded-lg cursor-pointer transition-all bg-surface dark:bg-slate-900 ${
+                      selectedAddressId === addr.id ? 'border-primary dark:border-primary-light shadow-md' : 'border-gray-200 dark:border-slate-800 hover:shadow'
                     }`}
-                    style={{
-                      backgroundColor: 'var(--surface, #ffffff)',
-                      borderColor: selectedAddressId === addr.id ? 'var(--primary, #7c3aed)' : 'var(--gray-light, #e5e7eb)',
-                    }}
                   >
-                    <p className="font-semibold" style={{ color: 'var(--text-primary, #111827)' }}>
+                    <p className="font-semibold text-text-pri dark:text-slate-100">
                       {addr.name} ({addr.type})
                     </p>
-                    <p className="mt-1" style={{ color: 'var(--text-secondary, #6b7280)' }}>
+                    <p className="mt-1 text-text-sec dark:text-slate-400">
                       {addr.address}
                     </p>
-                    <p className="mt-1" style={{ color: 'var(--text-secondary, #6b7280)' }}>
+                    <p className="mt-1 text-text-sec dark:text-slate-400">
                       {addr.city}, {addr.state} - {addr.pincode}
                     </p>
-                    <p className="mt-1" style={{ color: 'var(--text-secondary, #6b7280)' }}>
+                    <p className="mt-1 text-text-sec dark:text-slate-400">
                       Phone: {addr.mobile}
                     </p>
                     {addr.is_default && (
-                      <span className="inline-block mt-2 px-3 py-1 rounded-full text-sm font-medium" style={{
-                        backgroundColor: 'var(--gray-light, #f3f4f6)',
-                        color: 'var(--primary, #7c3aed)',
-                      }}>
+                      <span className="inline-block mt-2 px-3 py-1 rounded-full text-sm font-medium bg-primary/10 text-primary dark:bg-primary/20 dark:text-primary-light">
                         Default
                       </span>
                     )}
@@ -182,28 +167,28 @@ export default function Checkout() {
             )}
 
             <div className="mt-10">
-              <h2 className="text-2xl font-semibold mb-6" style={{ color: 'var(--text-primary, #111827)' }}>
+              <h2 className="text-2xl font-semibold mb-6 text-text-pri dark:text-slate-50">
                 Order Summary
               </h2>
-              <div className="p-6 rounded-lg" style={{ backgroundColor: 'var(--gray-light, #f3f4f6)' }}>
+              <div className="p-6 rounded-lg bg-gray-50 dark:bg-slate-900 border border-transparent dark:border-slate-800">
                 {cartItems.map((item) => (
-                  <div key={item.id} className="flex justify-between py-3 border-b last:border-b-0" style={{ borderColor: 'var(--gray-medium, #9ca3af)' }}>
+                  <div key={item.id} className="flex justify-between py-3 border-b border-gray-200 dark:border-slate-800 last:border-b-0">
                     <div>
-                      <p className="font-medium" style={{ color: 'var(--text-primary, #111827)' }}>
+                      <p className="font-medium text-text-pri dark:text-slate-100">
                         {item.name}
                       </p>
-                      <p className="text-sm" style={{ color: 'var(--text-secondary, #6b7280)' }}>
+                      <p className="text-sm text-text-sec dark:text-slate-400">
                         Qty: {item.qty}
                       </p>
                     </div>
-                    <p style={{ color: 'var(--text-primary, #111827)' }}>
+                    <p className="text-text-pri dark:text-slate-100">
                       ₹{(item.price * item.qty).toFixed(2)}
                     </p>
                   </div>
                 ))}
-                <div className="flex justify-between font-bold text-lg mt-6 pt-4 border-t" style={{ borderColor: 'var(--gray-medium, #9ca3af)' }}>
-                  <span style={{ color: 'var(--text-primary, #111827)' }}>Total</span>
-                  <span style={{ color: 'var(--text-primary, #111827)' }}>₹{subtotal.toFixed(2)}</span>
+                <div className="flex justify-between font-bold text-lg mt-6 pt-4 border-t border-gray-200 dark:border-slate-800">
+                  <span className="text-text-pri dark:text-slate-100">Total</span>
+                  <span className="text-text-pri dark:text-slate-100">₹{subtotal.toFixed(2)}</span>
                 </div>
               </div>
             </div>
@@ -211,11 +196,8 @@ export default function Checkout() {
 
           {/* Right - Payment & Place Order */}
           <div className="self-start sticky top-6">
-            <div className="rounded-lg p-8 shadow-md border" style={{
-              backgroundColor: 'var(--surface, #ffffff)',
-              borderColor: 'var(--gray-light, #e5e7eb)',
-            }}>
-              <h2 className="text-2xl font-semibold mb-6" style={{ color: 'var(--text-primary, #111827)' }}>
+            <div className="rounded-lg p-8 shadow-md border bg-surface dark:bg-slate-900 border-gray-200 dark:border-slate-800">
+              <h2 className="text-2xl font-semibold mb-6 text-text-pri dark:text-slate-50">
                 Payment Method
               </h2>
               <div className="space-y-4 mb-8">
@@ -225,9 +207,9 @@ export default function Checkout() {
                     name="payment" 
                     checked 
                     readOnly 
-                    className="w-5 h-5 accent-[var(--primary)]" 
+                    className="w-5 h-5 accent-primary dark:accent-primary-light" 
                   />
-                  <span style={{ color: 'var(--text-primary, #111827)' }}>
+                  <span className="text-text-pri dark:text-slate-100">
                     Cash on Delivery (COD)
                   </span>
                 </label>
@@ -237,16 +219,12 @@ export default function Checkout() {
               <button
                 onClick={handlePlaceOrder}
                 disabled={addresses.length === 0 || cartItems.length === 0}
-                className="w-full py-4 rounded-lg font-bold text-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                style={{
-                  backgroundColor: 'var(--primary, #7c3aed)',
-                  color: 'white',
-                }}
+                className="w-full py-4 rounded-lg font-bold text-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed bg-primary dark:bg-primary-light text-white dark:text-slate-900 shadow-primary/20"
               >
                 Place Order (COD)
               </button>
 
-              <p className="text-sm mt-6 text-center" style={{ color: 'var(--text-secondary, #6b7280)' }}>
+              <p className="text-sm mt-6 text-center text-text-sec dark:text-slate-400">
                 You will pay when your order is delivered
               </p>
             </div>

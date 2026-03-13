@@ -9,7 +9,7 @@ export default function Loader({ size = 'medium' }) {
   return (
     <div className="flex justify-center items-center py-10">
       <div
-        className={`${sizes[size]} border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin`}
+        className={`${sizes[size]} border-4 border-primary/20 dark:border-primary/10 border-t-primary dark:border-t-primary-light rounded-full animate-spin transition-colors`}
       ></div>
     </div>
   );

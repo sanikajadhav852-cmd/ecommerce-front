@@ -37,7 +37,7 @@ export default function Category() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: 'var(--background, #ffffff)' }}>
+      <div className="min-h-screen flex items-center justify-center bg-background dark:bg-slate-900 transition-colors">
         <Loader fullScreen />
       </div>
     );
@@ -45,15 +45,14 @@ export default function Category() {
 
   if (error || !category) {
     return (
-      <div className="min-h-screen flex items-center justify-center px-6" style={{ backgroundColor: 'var(--background, #ffffff)' }}>
+      <div className="min-h-screen flex items-center justify-center px-6 bg-background dark:bg-slate-900 transition-colors">
         <div className="text-center">
-          <h2 className="text-2xl md:text-3xl font-bold mb-4" style={{ color: 'var(--text-primary, #111827)' }}>
+          <h2 className="text-2xl md:text-3xl font-bold mb-4 text-text-pri dark:text-slate-100">
             {error || "Category Not Found"}
           </h2>
           <Link 
             to="/" 
-            className="inline-flex items-center gap-2 font-medium hover:underline transition-colors"
-            style={{ color: 'var(--primary, #7c3aed)' }}
+            className="inline-flex items-center gap-2 font-medium text-primary dark:text-primary-light hover:underline transition-colors"
           >
             <ArrowLeft size={20} /> Back to Home
           </Link>
@@ -63,17 +62,16 @@ export default function Category() {
   }
 
   return (
-    <div className="min-h-screen py-12" style={{ backgroundColor: 'var(--background, #ffffff)' }}>
+    <div className="min-h-screen py-12 bg-background dark:bg-slate-950 transition-colors">
       <div className="max-w-7xl mx-auto px-6">
         <Link 
           to="/" 
-          className="flex items-center gap-2 font-medium mb-8 transition-colors"
-          style={{ color: 'var(--text-secondary, #6b7280)' }}
+          className="flex items-center gap-2 font-medium mb-8 text-text-sec dark:text-slate-400 transition-colors"
         >
           <ArrowLeft size={20} /> Back to Home
         </Link>
 
-        <h1 className="text-3xl md:text-4xl font-bold mb-2" style={{ color: 'var(--text-primary, #111827)' }}>
+        <h1 className="text-3xl md:text-4xl font-bold mb-2 text-text-pri dark:text-slate-100">
           {category.name}
         </h1>
 
@@ -83,7 +81,7 @@ export default function Category() {
               <ProductCard key={product.id} product={product} />
             ))
           ) : (
-            <p className="col-span-full text-center py-20 text-lg font-medium" style={{ color: 'var(--text-secondary, #6b7280)' }}>
+            <p className="col-span-full text-center py-20 text-lg font-medium text-text-sec dark:text-slate-400">
               No products available in this category yet.
             </p>
           )}

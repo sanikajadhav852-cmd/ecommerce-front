@@ -6,7 +6,8 @@ import Sidebar from "./components/Sidebar";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { useAuthStore } from "./store/authStore";
 import { useTheme } from "./lib/useTheme";
-import { Menu, Bell, User, LogOut, Loader2 } from "lucide-react";
+import { useThemeStore } from "./store/themeStore";
+import { Menu, Bell, User, LogOut, Loader2, Sun, Moon } from "lucide-react";
 
 // ================= PAGE IMPORTS =================
 import Home from "./pages/Home";
@@ -55,9 +56,30 @@ import ContactEditor from "./pages/Admin/ContactEditor";
 import ThemeColors from "./pages/Admin/ThemeColors";
 import WebSettings from "./pages/Admin/websettings/WebSettings";
 import GeneralSettings from "./pages/Admin/websettings/GeneralSettings";
+import ReturnRequests from "./pages/Admin/returnrequest";
+import PaymentRequests from "./pages/Admin/paymentrequest";
+import CustomMessages from "./pages/Admin/custommessage";
+import ProductStock from "./pages/Admin/managestocks";
+import ViewCustomers from "./pages/Admin/customer/viewcust";
+import CustomerAddresses from "./pages/Admin/customer/address";
+import ViewTransactions from "./pages/Admin/customer/Transactions";
+import ManageCustomerWallet from "./pages/Admin/customer/CustomerWallet";
+import SalesReport from "./pages/Admin/reports/salesreports";
+import InventoryReport from "./pages/Admin/reports/inventoryreports";
+import ManageSystemUsers from "./pages/Admin/systemuser";
 
 function App() {
+  const { theme, toggleTheme } = useThemeStore();
   useTheme();
+  
+  useEffect(() => {
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [theme]);
+
   const initializeAuth = useAuthStore((state) => state.initializeAuth);
   const { logout } = useAuthStore();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -125,37 +147,45 @@ function App() {
         <Route element={<ProtectedRoute adminOnly />}>
           <Route
             element={
-              <div className="flex h-screen bg-[#f4f7fe] overflow-hidden">
+              <div className="flex h-screen bg-surface dark:bg-slate-900 transition-colors duration-300 overflow-hidden">
                 <Sidebar isSidebarOpen={isSidebarOpen} />
 
                 <main className="flex-1 flex flex-col overflow-hidden">
-                  <header className="bg-white h-16 flex items-center justify-between px-8 shadow-sm shrink-0 z-20 border-b border-gray-100">
+                  <header className="bg-white dark:bg-slate-800 h-16 flex items-center justify-between px-8 shadow-sm shrink-0 z-20 border-b border-gray-100 dark:border-slate-700 transition-colors duration-300">
                     <div className="flex items-center gap-4">
                       <button
                         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-                        className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                        className="p-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-full transition-colors"
                       >
                         <Menu size={20} />
                       </button>
-                      <span className="bg-purple-600 text-white text-xs px-2.5 py-1 rounded font-bold uppercase tracking-wider">
+                      <span className="bg-purple-600 dark:bg-purple-500 text-white text-xs px-2.5 py-1 rounded font-bold uppercase tracking-wider">
                         Admin Panel
                       </span>
                     </div>
 
                     <div className="flex items-center gap-6">
-                      <div className="relative cursor-pointer hover:text-purple-600 transition-colors">
+                      <button
+                        onClick={() => toggleTheme()}
+                        className="p-2 text-gray-600 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 hover:bg-purple-50 dark:hover:bg-slate-700 rounded-full transition-all group"
+                        title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+                      >
+                        {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+                      </button>
+
+                      <div className="relative cursor-pointer text-gray-600 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors">
                         <Bell size={22} />
-                        <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center border-2 border-white">
+                        <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center border-2 border-white dark:border-slate-800">
                           0
                         </span>
                       </div>
-                      <div className="flex items-center gap-3 border-l pl-6">
-                        <div className="w-9 h-9 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center font-bold">
+                      <div className="flex items-center gap-3 border-l border-gray-200 dark:border-slate-700 pl-6">
+                        <div className="w-9 h-9 bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 rounded-full flex items-center justify-center font-bold">
                           <User size={20} />
                         </div>
                         <button 
                           onClick={logout} 
-                          className="text-slate-400 hover:text-red-500 transition-colors"
+                          className="text-slate-400 dark:text-slate-500 hover:text-red-500 dark:hover:text-red-400 transition-colors"
                           title="Logout"
                         >
                           <LogOut size={18} />
@@ -164,7 +194,7 @@ function App() {
                     </div>
                   </header>
 
-                  <div className="flex-1 overflow-y-auto p-4 lg:p-8">
+                  <div className="flex-1 overflow-y-auto p-4 lg:p-8 text-text-primary dark:text-gray-100">
                     <Outlet />
                   </div>
                 </main>
@@ -203,6 +233,18 @@ function App() {
             <Route path="/admin/contact-editor" element={<ContactEditor />} />
             <Route path="/admin/web-settings" element={<WebSettings />} />
             <Route path="/admin/web-settings/general" element={<GeneralSettings />} />
+             <Route path="/admin/return-requests" element={<ReturnRequests />} />
+             <Route path="/admin/payment-requests" element={<PaymentRequests />} />
+             <Route path="/admin/custom-messages" element={<CustomMessages />} />
+             <Route path="/admin/product-stock" element={<ProductStock />} />
+             <Route path="/admin/customers" element={<ViewCustomers />} />
+             <Route path="/admin/customer-addresses" element={<CustomerAddresses />} />
+             <Route path="/admin/transactions" element={<ViewTransactions />} />
+             <Route path="/admin/customer-wallet" element={<ManageCustomerWallet />} />
+             <Route path="/admin/sales-report" element={<SalesReport />} />
+             <Route path="/admin/inventory-report" element={<InventoryReport />} />
+             <Route path="/admin/system-users" element={<ManageSystemUsers/>} />
+          
           </Route>
         </Route>
       </Routes>

@@ -41,7 +41,7 @@ export default function CategoriesPage() {
   const fetchCategories = async () => {
     try {
       setFetching(true);
-      const res = await api.get('/categories');
+      const res = await api.get('/categories?include_inactive=true&include_subcategories=false');
       if (res.data.success) {
         setCategories(res.data.categories || []);
       }

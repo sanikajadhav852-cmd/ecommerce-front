@@ -16,16 +16,55 @@
 }
 
 :root {
-  --primary: #7c3aed;          /* Default Main brand color */
+  --primary: #7c3aed;
   --primary-dark: #5b21b6;
   --primary-light: #a78bfa;
-  --secondary: #10b981;        /* Default Accent / success color */
+  --secondary: #10b981;
   --accent: #ec4899;
-  --background: #ffffff;       /* Main page background */
-  --surface: #f9fafb;          /* Cards, sections */
-  --text-primary: #111827;     /* Main text */
-  --text-secondary: #4b5563;   /* Subtle text */
+  
+  /* Light Mode Colors */
+  --background: #ffffff;
+  --surface: #f9fafb;
+  --surface-hover: #f3f4f6;
+  --text-primary: #111827;
+  --text-secondary: #4b5563;
+  --border-color: #e5e7eb;
+  
+  --card-bg: #ffffff;
+  --input-bg: #ffffff;
+  
   --gray-light: #f3f4f6;
   --gray-medium: #9ca3af;
   --gray-dark: #374151;
+}
+
+.dark {
+  /* Dark Mode Colors */
+  --background: #0d1117; /* Deeper black/dark */
+  --surface: #161b22;
+  --surface-hover: #1f2937;
+  --text-primary: #f0f6fc;
+  --text-secondary: #8b949e;
+  --border-color: #30363d;
+  
+  --card-bg: #0d1117;
+  --input-bg: #0d1117;
+  
+  --gray-light: #30363d;
+  --gray-medium: #484f58;
+  --gray-dark: #8b949e;
+  --primary-light: #c4b5fd;
+}
+
+/* Smooth transitions for theme switching */
+*,
+::before,
+::after {
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease, fill 0.3s ease, stroke 0.3s ease;
+}
+
+/* Prevent transitions on objects that shouldn't have them (e.g. images, some animations) */
+.no-transition,
+.no-transition * {
+  transition: none !important;
 }

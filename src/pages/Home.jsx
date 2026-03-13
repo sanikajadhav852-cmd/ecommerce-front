@@ -50,16 +50,16 @@ export default function Home() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-white">
+      <div className="min-h-screen flex flex-col items-center justify-center bg-white dark:bg-slate-900 transition-colors duration-300">
         <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1 }}>
-          <Loader2 className="w-12 h-12 text-primary" />
+          <Loader2 className="w-12 h-12 text-primary dark:text-primary-light" />
         </motion.div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#faf9f6]">
+    <div className="min-h-screen bg-[#faf9f6] dark:bg-slate-950 transition-colors duration-300">
       {/* 1. HERO SECTION - Dynamic from /sliders */}
       <section className="relative group">
         <Carousel
@@ -131,7 +131,7 @@ export default function Home() {
               <input 
                 type="email" 
                 placeholder="Enter your email" 
-                className="flex-1 px-6 py-4 rounded-full text-gray-900 focus:outline-none"
+                className="flex-1 px-6 py-4 rounded-full text-gray-900 dark:text-white dark:bg-white/10 dark:placeholder:text-white/50 focus:outline-none focus:ring-2 ring-white/20"
               />
               <button className="bg-gray-900 text-white px-8 py-4 rounded-full font-bold hover:bg-black transition-colors">
                 {siteContent.subscribe_button_text || 'Subscribe'}

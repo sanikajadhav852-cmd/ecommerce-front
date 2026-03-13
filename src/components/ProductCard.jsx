@@ -12,9 +12,9 @@ export default function ProductCard({ product }) {
     toggleWishlist(product);
   };
   return (
-    <div className="group bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl transition-all">
+    <div className="group bg-white dark:bg-slate-800 rounded-2xl overflow-hidden border border-gray-100 dark:border-slate-700 shadow-sm hover:shadow-xl transition-all">
       <Link to={`/product/${product.id}`} className="block">
-        <div className="aspect-square bg-gray-50 relative overflow-hidden">
+        <div className="aspect-square bg-gray-50 dark:bg-slate-900 relative overflow-hidden">
           <img
             src={`http://localhost:5000${product.image}`}
             alt={product.name}
@@ -28,21 +28,21 @@ export default function ProductCard({ product }) {
           )}
           <button 
             onClick={handleWishlist}
-            className="absolute top-3 right-3 p-2 bg-white/80 backdrop-blur-sm hover:bg-white rounded-full transition shadow-sm"
+            className="absolute top-3 right-3 p-2 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm hover:bg-white dark:hover:bg-slate-700 rounded-full transition shadow-sm"
           >
             <Heart size={18} className={isInWishlist(product.id) ? "fill-red-500 text-red-500" : "text-gray-400"} />
           </button>
         </div>
         <div className="p-4">
-          <h3 className="font-medium text-gray-900 line-clamp-2 h-12">
+          <h3 className="font-medium text-gray-900 dark:text-slate-100 line-clamp-2 h-12">
             {product.name}
           </h3>
           <div className="mt-2 flex items-center justify-between">
-            <span className="text-lg font-bold text-gray-900">
+            <span className="text-lg font-bold text-gray-900 dark:text-slate-100">
               ₹{Number(product.price).toLocaleString('en-IN')}
             </span>
-            <button className="p-2 hover:bg-primary/10 rounded-full transition">
-              <ShoppingBag size={18} className="text-primary" />
+            <button className="p-2 hover:bg-primary/10 dark:hover:bg-primary/20 rounded-full transition">
+              <ShoppingBag size={18} className="text-primary dark:text-primary-light" />
             </button>
           </div>
         </div>

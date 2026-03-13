@@ -26,10 +26,10 @@ export function Footer() {
 
   const year = new Date().getFullYear();
 
-  if (loading || error) return <div className="bg-[#0f172a] py-10 text-center text-gray-500">...</div>;
+  if (loading || error) return <div className="bg-slate-900 dark:bg-slate-950 py-10 text-center text-gray-500 transition-colors">...</div>;
 
   return (
-    <footer className="relative bg-[#0f172a] text-white pt-20 pb-10 mt-auto overflow-hidden">
+    <footer className="relative bg-slate-900 dark:bg-slate-950 text-white pt-20 pb-10 mt-auto overflow-hidden transition-colors">
       {/* Decorative Background Element */}
       <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-[120px] pointer-events-none" />
 

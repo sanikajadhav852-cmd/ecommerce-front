@@ -49,7 +49,9 @@ export default function GeneralSettings() {
   const [mediaSearch, setMediaSearch] = useState('');
   const [selectedAboutMediaId, setSelectedAboutMediaId] = useState(null);
   const [selectedContactMediaId, setSelectedContactMediaId] = useState(null);
-  const [mediaTarget, setMediaTarget] = useState('about'); // 'about' or 'contact'
+  const [selectedLogoMediaId, setSelectedLogoMediaId] = useState(null);
+  const [selectedFaviconMediaId, setSelectedFaviconMediaId] = useState(null);
+  const [mediaTarget, setMediaTarget] = useState('about'); // 'about', 'contact', 'logo', 'favicon'
 
   const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
@@ -83,11 +85,21 @@ export default function GeneralSettings() {
       setSelectedAboutMediaId(item.id);
       const aboutInput = document.querySelector('input[name="about_image"]');
       if (aboutInput) aboutInput.value = '';
-    } else {
+    } else if (mediaTarget === 'contact') {
       setContactMapPreview(imageUrl);
       setSelectedContactMediaId(item.id);
       const contactInput = document.querySelector('input[name="contact_map_image"]');
       if (contactInput) contactInput.value = '';
+    } else if (mediaTarget === 'logo') {
+      setLogoPreview(imageUrl);
+      setSelectedLogoMediaId(item.id);
+      const logoInput = document.querySelector('input[name="logo"]');
+      if (logoInput) logoInput.value = '';
+    } else if (mediaTarget === 'favicon') {
+      setFaviconPreview(imageUrl);
+      setSelectedFaviconMediaId(item.id);
+      const faviconInput = document.querySelector('input[name="favicon"]');
+      if (faviconInput) faviconInput.value = '';
     }
     
     setShowMediaModal(false);
@@ -134,6 +146,10 @@ export default function GeneralSettings() {
         setSelectedAboutMediaId(null);
       } else if (e.target.name === 'contact_map_image') {
         setSelectedContactMediaId(null);
+      } else if (e.target.name === 'logo') {
+        setSelectedLogoMediaId(null);
+      } else if (e.target.name === 'favicon') {
+        setSelectedFaviconMediaId(null);
       }
     }
   };
@@ -159,8 +175,18 @@ export default function GeneralSettings() {
       const aboutFile = document.querySelector('input[name="about_image"]')?.files[0];
       const mapFile = document.querySelector('input[name="contact_map_image"]')?.files[0];
 
-      if (logoFile) form.append('logo', logoFile);
-      if (faviconFile) form.append('favicon', faviconFile);
+      if (logoFile) {
+        form.append('logo', logoFile);
+      } else if (selectedLogoMediaId) {
+        form.append('logoMediaId', selectedLogoMediaId);
+      }
+
+      if (faviconFile) {
+        form.append('favicon', faviconFile);
+      } else if (selectedFaviconMediaId) {
+        form.append('faviconMediaId', selectedFaviconMediaId);
+      }
+
       if (aboutFile) {
         form.append('about_image', aboutFile);
       } else if (selectedAboutMediaId) {
@@ -245,12 +271,44 @@ export default function GeneralSettings() {
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-3">Site Logo</label>
                 {logoPreview && <img src={logoPreview} alt="Logo" className="h-24 object-contain mb-4 border rounded" />}
-                <input type="file" name="logo" accept="image/*" onChange={(e) => handleFile(e, setLogoPreview)} className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100" />
+                <div className="flex flex-col gap-3">
+                  <div className="flex flex-wrap gap-2">
+                    <button 
+                      type="button" 
+                      onClick={() => { setMediaTarget('logo'); setShowMediaModal(true); }}
+                      className="flex items-center gap-2 px-4 py-2 bg-purple-50 text-purple-700 rounded-lg hover:bg-purple-100 transition shadow-sm font-bold text-xs"
+                    >
+                      <ImageIcon size={16} />
+                      CHOOSE FROM LIBRARY
+                    </button>
+                    <label className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition cursor-pointer font-bold text-xs">
+                      <Upload size={16} />
+                      UPLOAD NEW
+                      <input type="file" name="logo" accept="image/*" onChange={(e) => handleFile(e, setLogoPreview)} className="hidden" />
+                    </label>
+                  </div>
+                </div>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-3">Favicon</label>
                 {faviconPreview && <img src={faviconPreview} alt="Favicon" className="h-16 w-16 object-contain mb-4 border rounded" />}
-                <input type="file" name="favicon" accept="image/*" onChange={(e) => handleFile(e, setFaviconPreview)} className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100" />
+                <div className="flex flex-col gap-3">
+                  <div className="flex flex-wrap gap-2">
+                    <button 
+                      type="button" 
+                      onClick={() => { setMediaTarget('favicon'); setShowMediaModal(true); }}
+                      className="flex items-center gap-2 px-4 py-2 bg-purple-50 text-purple-700 rounded-lg hover:bg-purple-100 transition shadow-sm font-bold text-xs"
+                    >
+                      <ImageIcon size={16} />
+                      CHOOSE FROM LIBRARY
+                    </button>
+                    <label className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition cursor-pointer font-bold text-xs">
+                      <Upload size={16} />
+                      UPLOAD NEW
+                      <input type="file" name="favicon" accept="image/*" onChange={(e) => handleFile(e, setFaviconPreview)} className="hidden" />
+                    </label>
+                  </div>
+                </div>
               </div>
             </div>
           </section>
@@ -499,7 +557,11 @@ export default function GeneralSettings() {
                     {mediaItems.filter(i => i.name.toLowerCase().includes(mediaSearch.toLowerCase())).map(item => {
                       const imageUrl = item.thumbnail || `${item.sub_directory}/${item.name}`;
                       const fullUrl = imageUrl.startsWith('http') ? imageUrl : `${baseUrl}/${imageUrl.replace(/^\/+/, '')}`;
-                      const isSelected = mediaTarget === 'about' ? selectedAboutMediaId === item.id : selectedContactMediaId === item.id;
+                      const isSelected = 
+                        mediaTarget === 'about' ? selectedAboutMediaId === item.id : 
+                        mediaTarget === 'contact' ? selectedContactMediaId === item.id :
+                        mediaTarget === 'logo' ? selectedLogoMediaId === item.id :
+                        mediaTarget === 'favicon' ? selectedFaviconMediaId === item.id : false;
 
                       return (
                         <motion.div 

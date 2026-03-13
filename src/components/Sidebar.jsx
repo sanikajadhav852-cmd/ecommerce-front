@@ -33,7 +33,8 @@ import {
   Map,
   FileText,
   Phone,
-  Palette, // Added for About section icon
+  Palette, 
+  UserCog// Added for About section icon
 } from "lucide-react";
 
 export default function Sidebar({ isSidebarOpen }) {
@@ -95,7 +96,7 @@ export default function Sidebar({ isSidebarOpen }) {
         { name: "Sections Order", path: "/sections-order" }
       ]
      },
-    { name: "Manage Stock", icon: Box, color: "text-red-600" },
+    { name: "Manage Stock", icon: Box, color: "text-red-600" , path: "/admin/product-stock" },
     {
       name: "Support Tickets",
       icon: Ticket,
@@ -109,15 +110,62 @@ export default function Sidebar({ isSidebarOpen }) {
       color: "text-orange-500",
       hasSub: true,
     },
-    { name: "Customer", icon: User, color: "text-cyan-500", hasSub: true },
-    { name: "Return Requests", icon: RotateCcw, color: "text-red-500" },
-    { name: "Payment Requests", icon: Wallet, color: "text-purple-600" },
-    { name: "Custom message", icon: MessageSquare, color: "text-cyan-500" },
+   {
+      name: "Customers",
+      icon: Users,
+      color: "text-cyan-500",
+      hasSub: true,
+      subItems: [
+        { 
+          name: "View Customers", 
+          path: "/admin/customers",
+          icon: UserCog // nice icon for view customers
+        },
+        { 
+      name: "Address", 
+      path: "/admin/customer-addresses",
+      icon: MapPin  // nice icon for addresses
+    },
+     { 
+      name: "Transactions", 
+      path: "/admin/transactions",
+      icon: MapPin  // nice icon for addresses
+    },
+    { 
+      name: "Wallet Transcation", 
+      path: "/admin/customer-wallet",
+      icon: MapPin  // nice icon for addresses
+    },
+        // You can add more later, e.g.:
+        // { name: "Add Customer", path: "/admin/add-customer" },
+        // { name: "Blocked Customers", path: "/admin/blocked-customers" },
+      ],
+    },
+    { name: "Return Requests", icon: RotateCcw, color: "text-red-500", path: "/admin/return-requests" },
+    { name: "Payment Requests", icon: Wallet, color: "text-purple-600", path: "/admin/payment-requests" },
+    { name: "Custom message", icon: MessageSquare, color: "text-cyan-500", path: "/admin/custom-messages" },
     { name: "System", icon: Settings, color: "text-red-500" },
    
-    { name: "Reports", icon: BarChart3, color: "text-cyan-600", hasSub: true },
+   {
+  name: "Reports",
+  icon: BarChart3,
+  color: "text-cyan-600",
+  hasSub: true,
+  subItems: [
+    { name: "Sales Report", path: "/admin/sales-report" },
+     { name: "Inventory Report", path: "/admin/inventory-report" },
+    // ... other reports
+  ],
+  
+ 
+},
     { name: "FAQ", icon: HelpCircle, color: "text-red-500" },
-    { name: "System Users", icon: Users, color: "text-green-500" },
+  
+      { 
+      name: "System Users", 
+      path: "/admin/system-users",
+      icon: Users  // nice icon for addresses
+    },
 
    
    
@@ -128,19 +176,18 @@ export default function Sidebar({ isSidebarOpen }) {
     color: "text-green-600",
     path: "/admin/web-settings",   // ← this opens the new page
   },
-  
   ];
 
   return (
     <aside
-      className={`${isSidebarOpen ? "w-64" : "w-20"} bg-white h-full shadow-xl transition-all duration-300 flex flex-col overflow-y-auto shrink-0 border-r border-gray-100`}
+      className={`${isSidebarOpen ? "w-64" : "w-20"} bg-white dark:bg-slate-800 h-full shadow-xl transition-all duration-300 flex flex-col overflow-y-auto shrink-0 border-r border-gray-100 dark:border-slate-700`}
     >
-      <div className="p-6 flex items-center gap-3 border-b sticky top-0 bg-white z-10">
-        <div className="w-8 h-8 bg-purple-600 rounded flex items-center justify-center text-white font-bold shrink-0">
+      <div className="p-6 flex items-center gap-3 border-b dark:border-slate-700 sticky top-0 bg-white dark:bg-slate-800 z-10 transition-colors duration-300">
+        <div className="w-8 h-8 bg-purple-600 text-white rounded flex items-center justify-center font-bold shrink-0">
           J
         </div>
         {isSidebarOpen && (
-          <span className="font-bold text-gray-700 text-lg truncate uppercase tracking-tight">
+          <span className="font-bold text-gray-700 dark:text-gray-100 text-lg truncate uppercase tracking-tight">
             Jijai Masale
           </span>
         )}
@@ -156,8 +203,8 @@ export default function Sidebar({ isSidebarOpen }) {
                 }
                 className={`w-full flex items-center justify-between p-3 rounded-xl transition-colors ${
                   expandedMenu === item.name
-                    ? "bg-purple-50 text-purple-700"
-                    : "text-gray-500 hover:bg-gray-50"
+                    ? "bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400"
+                    : "text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-slate-700/50"
                 }`}
               >
                 <div className="flex items-center gap-3">
@@ -178,8 +225,8 @@ export default function Sidebar({ isSidebarOpen }) {
                 to={item.path}
                 className={`w-full flex items-center gap-3 p-3 rounded-xl transition-colors ${
                   location.pathname === item.path
-                    ? "bg-purple-50 text-purple-700"
-                    : "text-gray-500 hover:bg-gray-50"
+                    ? "bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400"
+                    : "text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-slate-700/50"
                 }`}
               >
                 <item.icon size={20} className={item.color} />
@@ -191,19 +238,19 @@ export default function Sidebar({ isSidebarOpen }) {
 
             {/* Sub-menu items */}
             {isSidebarOpen && item.hasSub && expandedMenu === item.name && (
-              <div className="mt-1 ml-4 space-y-1 border-l-2 border-gray-100 pl-2">
+              <div className="mt-1 ml-4 space-y-1 border-l-2 border-gray-100 dark:border-slate-700 pl-2">
                 {item.subItems?.map((sub) => (
                   <Link
                     key={sub.name}
                     to={sub.path}
                     className={`flex items-center gap-3 p-2.5 text-sm font-medium transition-colors rounded-lg ${
                       location.pathname === sub.path
-                        ? "text-purple-700 bg-purple-50"
-                        : "text-gray-500 hover:text-purple-600 hover:bg-gray-50"
+                        ? "text-purple-700 dark:text-purple-400 bg-purple-50 dark:bg-purple-900/30"
+                        : "text-gray-500 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-300 hover:bg-gray-50 dark:hover:bg-slate-700/50"
                     }`}
                   >
                     <div
-                      className={`w-1.5 h-1.5 rounded-full ${location.pathname === sub.path ? "bg-purple-600" : "bg-gray-300"}`}
+                      className={`w-1.5 h-1.5 rounded-full ${location.pathname === sub.path ? "bg-purple-600 dark:bg-purple-400" : "bg-gray-300 dark:bg-gray-600"}`}
                     />
                     {sub.name}
                   </Link>
@@ -216,10 +263,10 @@ export default function Sidebar({ isSidebarOpen }) {
         {/* Logout at the bottom */}
         <button
           onClick={logout}
-          className="w-full flex items-center gap-3 p-3 mt-4 text-gray-500 hover:bg-red-50 hover:text-red-600 rounded-xl transition-colors"
+          className="w-full flex items-center gap-3 p-3 mt-4 text-gray-500 dark:text-gray-400 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 dark:hover:text-red-400 rounded-xl transition-colors"
         >
-          <LogOut size={20} className="text-red-500" />
-          {isSidebarOpen && <span className="font-medium text-sm">Logout</span>}
+          <LogOut size={20} className="text-red-500 dark:text-red-400" />
+          {isSidebarOpen && <span className="font-medium text-sm text-red-600 dark:text-red-400">Logout</span>}
         </button>
       </nav>
     </aside>

@@ -1,0 +1,121 @@
+/*
+  ================================================================
+  GLOBAL DARK MODE - REFACTORED TO USE CSS VARIABLES
+  ================================================================
+*/
+
+.dark body,
+.dark #root,
+.dark main {
+  background-color: var(--background) !important;
+  color: var(--text-primary) !important;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   1. BACKGROUNDS
+   ════════════════════════════════════════════════════════════════ */
+.dark .bg-white                  { background-color: var(--surface) !important; }
+.dark .bg-gray-50, 
+.dark .bg-slate-50,
+.dark .bg-zinc-50,
+.dark .bg-neutral-50             { background-color: var(--background) !important; }
+
+.dark .bg-gray-100,
+.dark .bg-slate-100,
+.dark .bg-zinc-100,
+.dark .bg-neutral-100            { background-color: var(--surface) !important; }
+
+.dark .bg-gray-200,
+.dark .bg-slate-200              { background-color: var(--gray-light) !important; }
+
+/* Semi-transparent overlays */
+.dark .bg-white\/50,
+.dark .bg-white\/60,
+.dark .bg-white\/70,
+.dark .bg-white\/80,
+.dark .bg-white\/90               { background-color: rgba(22, 27, 34, 0.8) !important; }
+
+/* ════════════════════════════════════════════════════════════════
+   2. TEXT COLORS
+   ════════════════════════════════════════════════════════════════ */
+.dark .text-black,
+.dark .text-gray-900,
+.dark .text-slate-900            { color: var(--text-primary) !important; }
+
+.dark .text-gray-800,
+.dark .text-slate-800            { color: var(--text-primary) !important; opacity: 0.9; }
+
+.dark .text-gray-700,
+.dark .text-slate-700            { color: var(--text-secondary) !important; }
+
+.dark .text-gray-600,
+.dark .text-slate-600            { color: var(--text-secondary) !important; opacity: 0.8; }
+
+/* ════════════════════════════════════════════════════════════════
+   3. BORDERS / DIVIDERS
+   ════════════════════════════════════════════════════════════════ */
+.dark .border-gray-50,
+.dark .border-gray-100,
+.dark .border-gray-200,
+.dark .border-slate-100,
+.dark .border-slate-200          { border-color: var(--border-color) !important; }
+
+.dark .divide-gray-100 > * + *,
+.dark .divide-gray-200 > * + *   { border-color: var(--border-color) !important; }
+
+/* ════════════════════════════════════════════════════════════════
+   4. FORMS
+   ════════════════════════════════════════════════════════════════ */
+.dark input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+.dark textarea,
+.dark select {
+  background-color: var(--input-bg) !important;
+  color: var(--text-primary) !important;
+  border-color: var(--border-color) !important;
+}
+
+.dark input::placeholder,
+.dark textarea::placeholder {
+  color: var(--text-secondary) !important;
+  opacity: 0.5;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   5. NAVIGATION / CARDS
+   ════════════════════════════════════════════════════════════════ */
+.dark header,
+.dark nav {
+  background-color: var(--background) !important;
+  border-color: var(--border-color) !important;
+}
+
+.dark footer {
+  background-color: #010409 !important; /* Even darker for footer */
+}
+
+.dark .card,
+.dark [class*="shadow"] {
+  background-color: var(--card-bg);
+  border-color: var(--border-color);
+}
+
+/* Dropdowns / Popups */
+.dark [class*="absolute"][class*="bg-white"],
+.dark [class*="fixed"][class*="bg-white"] {
+  background-color: var(--surface) !important;
+  border-color: var(--border-color) !important;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   6. HOVER STATES
+   ════════════════════════════════════════════════════════════════ */
+.dark .hover\:bg-gray-50:hover,
+.dark .hover\:bg-gray-100:hover,
+.dark .hover\:bg-white:hover     { background-color: var(--surface-hover) !important; }
+
+/* ════════════════════════════════════════════════════════════════
+   7. SCROLLBARS (Modern Dark Look)
+   ════════════════════════════════════════════════════════════════ */
+.dark ::-webkit-scrollbar        { background: var(--background); width: 8px; }
+.dark ::-webkit-scrollbar-thumb  { background: var(--border-color); border-radius: 10px; }
+.dark ::-webkit-scrollbar-thumb:hover { background: var(--gray-medium); }

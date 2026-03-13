@@ -48,20 +48,20 @@ const onSubmit = async (data) => {
 };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 py-12 px-4">
-      <div className="max-w-md w-full bg-white rounded-xl shadow-lg p-8">
-        <h2 className="text-3xl font-bold text-center mb-8">Login</h2>
+    <div className="min-h-screen flex items-center justify-center bg-background dark:bg-slate-950 transition-colors py-12 px-4">
+      <div className="max-w-md w-full bg-surface dark:bg-slate-900 rounded-xl shadow-lg border border-gray-100 dark:border-slate-800 p-8">
+        <h2 className="text-3xl font-bold text-center mb-8 text-text-pri dark:text-slate-50">Login</h2>
 
-        {error && <div className="bg-red-100 text-red-700 p-4 rounded mb-6">{error}</div>}
+        {error && <div className="bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 p-4 rounded mb-6">{error}</div>}
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-text-pri dark:text-slate-200">
               Email or Mobile
             </label>
             <input
               {...register('emailOrMobile')}
-              className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary py-3 px-4"
+              className="mt-1 block w-full border border-gray-300 dark:border-slate-700 rounded-md shadow-sm focus:ring-primary focus:border-primary py-3 px-4 bg-surface dark:bg-slate-800 text-text-pri dark:text-slate-100"
               placeholder="Enter email or mobile"
             />
             {errors.emailOrMobile && (
@@ -70,13 +70,13 @@ const onSubmit = async (data) => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-text-pri dark:text-slate-200">
               Password
             </label>
             <input
               type="password"
               {...register('password')}
-              className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary py-3 px-4"
+              className="mt-1 block w-full border border-gray-300 dark:border-slate-700 rounded-md shadow-sm focus:ring-primary focus:border-primary py-3 px-4 bg-surface dark:bg-slate-800 text-text-pri dark:text-slate-100"
               placeholder="••••••••"
             />
             {errors.password && (
@@ -87,15 +87,15 @@ const onSubmit = async (data) => {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full bg-primary text-white py-3 rounded-lg font-semibold hover:bg-primary-dark transition disabled:opacity-50"
+            className="w-full bg-primary dark:bg-primary-light text-white dark:text-slate-900 py-3 rounded-lg font-semibold hover:bg-primary-dark dark:hover:bg-primary transition disabled:opacity-50"
           >
             {isSubmitting ? 'Logging in...' : 'Login'}
           </button>
         </form>
 
-        <p className="mt-6 text-center text-gray-600">
+        <p className="mt-6 text-center text-text-sec dark:text-slate-400">
           Don't have an account?{' '}
-          <Link to="/register" className="text-primary hover:underline">
+          <Link to="/register" className="text-primary dark:text-primary-light hover:underline font-medium">
             Register here
           </Link>
         </p>

@@ -29,39 +29,39 @@ export default function Categories() {
     fetchCategories();
   }, []);
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center bg-white"><Loader /></div>;
+  if (loading) return <div className="min-h-screen flex items-center justify-center bg-white dark:bg-slate-900 transition-colors"><Loader /></div>;
 
   return (
-    <div className="min-h-screen bg-[#FCFBFA] pb-20">
+    <div className="min-h-screen bg-[#FCFBFA] dark:bg-slate-950 pb-20 transition-colors duration-300">
       {/* --- HERO HEADER --- */}
       <section className="relative pt-20 pb-16 px-6 overflow-hidden">
         {/* Decorative elements */}
-        <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/4 w-[500px] h-[500px] bg-orange-100 rounded-full blur-3xl opacity-50" />
-        <div className="absolute bottom-0 left-0 translate-y-1/2 -translate-x-1/4 w-[400px] h-[400px] bg-purple-100 rounded-full blur-3xl opacity-50" />
+        <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/4 w-[500px] h-[500px] bg-orange-100 dark:bg-orange-900/10 rounded-full blur-3xl opacity-50" />
+        <div className="absolute bottom-0 left-0 translate-y-1/2 -translate-x-1/4 w-[400px] h-[400px] bg-purple-100 dark:bg-purple-900/10 rounded-full blur-3xl opacity-50" />
 
         <div className="max-w-7xl mx-auto relative z-10 text-center">
           <motion.div 
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white shadow-sm border border-gray-100 mb-6"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white dark:bg-slate-800 shadow-sm border border-gray-100 dark:border-slate-700 mb-6"
           >
             <Sparkles size={16} className="text-orange-500" />
-            <span className="text-xs font-bold uppercase tracking-widest text-gray-600">Explore Our Pantry</span>
+            <span className="text-xs font-bold uppercase tracking-widest text-gray-600 dark:text-slate-400">Explore Our Pantry</span>
           </motion.div>
           
           <motion.h1 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-5xl md:text-7xl font-serif font-black text-gray-900 mb-6 tracking-tight"
+            className="text-5xl md:text-7xl font-serif font-black text-gray-900 dark:text-slate-50 mb-6 tracking-tight"
           >
-            The <span className="text-orange-600 italic">Spice</span> Library
+            The <span className="text-orange-600 dark:text-orange-500 italic">Spice</span> Library
           </motion.h1>
           
           <motion.p 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.2 }}
-            className="text-lg text-gray-500 max-w-2xl mx-auto leading-relaxed"
+            className="text-lg text-gray-500 dark:text-slate-400 max-w-2xl mx-auto leading-relaxed"
           >
             Browse our meticulously sourced collections. From sun-dried chillies to hand-ground masalas, find the soul of Indian cooking here.
           </motion.p>
@@ -78,7 +78,7 @@ export default function Categories() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
-              className="group relative flex flex-col bg-white rounded-[2.5rem] border border-gray-100 shadow-sm hover:shadow-2xl hover:border-orange-100 transition-all duration-500 overflow-hidden"
+              className="group relative flex flex-col bg-white dark:bg-slate-800 rounded-[2.5rem] border border-gray-100 dark:border-slate-700 shadow-sm hover:shadow-2xl hover:border-orange-100 dark:hover:border-orange-500/30 transition-all duration-500 overflow-hidden"
             >
               {/* Image Container with Overlay */}
               <div className="relative h-80 overflow-hidden">
@@ -108,7 +108,7 @@ export default function Categories() {
                     {cat.subcategories?.length > 0 && (
                       <button 
                         onClick={() => setExpandedCategory(expandedCategory === cat.id ? null : cat.id)}
-                        className="w-14 flex items-center justify-center bg-white/20 backdrop-blur-md border border-white/30 text-white rounded-2xl hover:bg-white/40 transition-all"
+                        className="w-14 flex items-center justify-center bg-white/20 dark:bg-slate-700/40 backdrop-blur-md border border-white/30 dark:border-slate-600 text-white rounded-2xl hover:bg-white/40 dark:hover:bg-slate-600 transition-all"
                       >
                         <ChevronDown size={20} className={`transition-transform duration-300 ${expandedCategory === cat.id ? 'rotate-180' : ''}`} />
                       </button>
@@ -133,10 +133,10 @@ export default function Categories() {
                           <Link
                             key={sub.id}
                             to={`/category/${sub.id}`}
-                            className="flex items-center justify-between p-4 bg-white border border-gray-100 rounded-2xl text-sm font-bold text-gray-700 hover:border-orange-300 hover:text-orange-600 transition-all group/sub"
+                            className="flex items-center justify-between p-4 bg-white dark:bg-slate-900 border border-gray-100 dark:border-slate-700 rounded-2xl text-sm font-bold text-gray-700 dark:text-slate-300 hover:border-orange-300 dark:hover:border-orange-500 hover:text-orange-600 dark:hover:text-orange-400 transition-all group/sub"
                           >
                             {sub.name}
-                            <div className="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center opacity-0 group-hover/sub:opacity-100 transition-all">
+                            <div className="w-8 h-8 rounded-full bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center opacity-0 group-hover/sub:opacity-100 transition-all">
                               <ArrowRight size={14} />
                             </div>
                           </Link>
@@ -153,11 +153,11 @@ export default function Categories() {
 
       {/* --- FOOTER CTA --- */}
       <section className="mt-32 max-w-5xl mx-auto px-6">
-        <div className="bg-gray-900 rounded-[3rem] p-12 text-center relative overflow-hidden">
+        <div className="bg-gray-900 dark:bg-slate-900/80 border border-transparent dark:border-slate-800 rounded-[3rem] p-12 text-center relative overflow-hidden">
           <div className="absolute top-0 right-0 w-64 h-64 bg-orange-600/20 rounded-full blur-3xl" />
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Can't find what you're looking for?</h2>
           <p className="text-gray-400 mb-8">Our master blenders can create custom spice mixes for bulk orders.</p>
-          <button className="px-10 py-4 bg-white text-gray-900 rounded-full font-bold hover:bg-orange-500 hover:text-white transition-all">
+          <button className="px-10 py-4 bg-white dark:bg-slate-100 text-gray-900 rounded-full font-bold hover:bg-orange-500 hover:text-white transition-all">
             Contact Specialist
           </button>
         </div>

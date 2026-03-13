@@ -43,12 +43,12 @@ export default function TopOffers() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-white">
+      <div className="min-h-screen flex flex-col items-center justify-center bg-background dark:bg-slate-950 transition-colors">
         <Loader />
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="mt-6 font-bold uppercase tracking-widest text-xs text-gray-500"
+          className="mt-6 font-bold uppercase tracking-widest text-xs text-text-sec dark:text-slate-400"
         >
           Loading Top Offers...
         </motion.p>
@@ -58,10 +58,10 @@ export default function TopOffers() {
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center px-6 bg-white">
+      <div className="min-h-screen flex items-center justify-center px-6 bg-background dark:bg-slate-950 transition-colors">
         <div className="text-center max-w-md">
           <AlertCircle size={64} className="mx-auto mb-6 text-accent" />
-          <p className="text-xl font-medium text-gray-800">{error}</p>
+          <p className="text-xl font-medium text-text-pri dark:text-slate-50">{error}</p>
         </div>
       </div>
     );
@@ -71,14 +71,14 @@ export default function TopOffers() {
   const hasOffers = adminOffers.length > 0;
 
   return (
-    <div className="min-h-screen pb-24 bg-white">
+    <div className="min-h-screen pb-24 bg-background dark:bg-slate-950 transition-colors">
       <div className="max-w-7xl mx-auto px-6 pt-16 space-y-20">
 
         {/* Page Title */}
         <motion.h1
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-5xl md:text-7xl font-black text-center text-gray-900"
+          className="text-5xl md:text-7xl font-black text-center text-text-pri dark:text-slate-50"
         >
           Top Offers
         </motion.h1>
@@ -135,12 +135,12 @@ export default function TopOffers() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="text-center py-16 bg-gray-50 rounded-2xl border border-gray-200"
+            className="text-center py-16 bg-surface dark:bg-slate-900 rounded-2xl border border-gray-100 dark:border-slate-800 transition-colors"
           >
-            <h2 className="text-3xl font-bold text-gray-700 mb-4">
+            <h2 className="text-3xl font-bold text-text-pri dark:text-slate-50 mb-4">
               No Slider Offers Available
             </h2>
-            <p className="text-gray-500 max-w-md mx-auto">
+            <p className="text-text-sec dark:text-slate-400 max-w-md mx-auto">
               Check back later or browse our full collection for current deals.
             </p>
           </motion.div>
@@ -162,7 +162,7 @@ export default function TopOffers() {
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: index * 0.08 }}
-                    className="relative group bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300"
+                    className="relative group bg-surface dark:bg-slate-900 rounded-2xl shadow-lg border border-transparent dark:border-slate-800 overflow-hidden hover:shadow-2xl transition-all duration-300"
                   >
                     {/* Discount Badge */}
                     <div className="absolute top-4 right-4 z-20 bg-accent text-white px-4 py-2 rounded-full font-bold text-sm shadow-lg">
@@ -185,12 +185,12 @@ export default function TopOffers() {
                     <div className="p-6">
                       <div className="flex items-center gap-2 mb-3">
                         <Percent size={20} className="text-accent" />
-                        <h3 className="text-xl md:text-2xl font-bold text-gray-800 capitalize">
+                        <h3 className="text-xl md:text-2xl font-bold text-text-pri dark:text-slate-50 capitalize">
                           {offer.offerType}
                         </h3>
                       </div>
 
-                      <p className="text-gray-600 mb-6 text-base">
+                      <p className="text-text-sec dark:text-slate-400 mb-6 text-base">
                         {offer.type}
                       </p>
 
@@ -199,12 +199,12 @@ export default function TopOffers() {
                           href={offer.link}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-2 text-primary font-medium hover:text-primary-dark transition-colors"
+                          className="inline-flex items-center gap-2 text-primary dark:text-primary-light font-medium hover:text-primary-dark dark:hover:text-primary transition-colors"
                         >
                           View Details <ArrowRight size={18} />
                         </a>
                       ) : (
-                        <span className="text-primary font-medium">
+                        <span className="text-primary dark:text-primary-light font-medium">
                           Limited Time Deal
                         </span>
                       )}
@@ -218,12 +218,12 @@ export default function TopOffers() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="text-center py-16 bg-gray-50 rounded-2xl border border-gray-200"
+            className="text-center py-16 bg-surface dark:bg-slate-900 rounded-2xl border border-gray-100 dark:border-slate-800 transition-colors"
           >
-            <h2 className="text-3xl font-bold text-gray-700 mb-4">
+            <h2 className="text-3xl font-bold text-text-pri dark:text-slate-50 mb-4">
               No Individual Offers Available
             </h2>
-            <p className="text-gray-500 max-w-md mx-auto">
+            <p className="text-text-sec dark:text-slate-400 max-w-md mx-auto">
               New deals are added regularly. Browse our products to find the best prices.
             </p>
           </motion.div>
@@ -238,7 +238,7 @@ export default function TopOffers() {
         >
           <Link
             to="/products"
-            className="inline-flex items-center gap-3 px-12 py-6 rounded-full font-bold uppercase tracking-wider text-sm shadow-xl transition-all group bg-primary text-white hover:bg-primary-dark hover:scale-105"
+            className="inline-flex items-center gap-3 px-12 py-6 rounded-full font-bold uppercase tracking-wider text-sm shadow-xl transition-all group bg-primary dark:bg-primary-light text-white dark:text-slate-900 hover:bg-primary-dark dark:hover:bg-primary hover:scale-105"
           >
             Discover Full Collection <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
           </Link>
