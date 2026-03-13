@@ -144,7 +144,7 @@ export default function Sidebar({ isSidebarOpen }) {
     { name: "Return Requests", icon: RotateCcw, color: "text-red-500", path: "/admin/return-requests" },
     { name: "Payment Requests", icon: Wallet, color: "text-purple-600", path: "/admin/payment-requests" },
     { name: "Custom message", icon: MessageSquare, color: "text-cyan-500", path: "/admin/custom-messages" },
-    { name: "System", icon: Settings, color: "text-red-500" },
+    { name: "System", icon: Settings, color: "text-red-500" , path: "/admin/system"},
    
    {
   name: "Reports",

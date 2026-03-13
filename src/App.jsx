@@ -68,6 +68,15 @@ import SalesReport from "./pages/Admin/reports/salesreports";
 import InventoryReport from "./pages/Admin/reports/inventoryreports";
 import ManageSystemUsers from "./pages/Admin/systemuser";
 
+import System from "./pages/Admin/system/System";
+import NotificationSettings from "./pages/Admin/system/notification";
+import AuthenticationSettings from "./pages/Admin/system/authentication";
+import SMSGatewaySettings from "./pages/Admin/system/smsgateway";
+import PolicySettings from "./pages/Admin/system/privacypolicy";
+import ReturnPolicy from "./pages/Admin/system/returnpolicy";
+import ShippingPolicy from "./pages/Admin/system/shippingpolicy";
+import AdminPolicy from "./pages/Admin/system/adminpolicy";
+
 function App() {
   const { theme, toggleTheme } = useThemeStore();
   useTheme();
@@ -244,7 +253,17 @@ function App() {
              <Route path="/admin/sales-report" element={<SalesReport />} />
              <Route path="/admin/inventory-report" element={<InventoryReport />} />
              <Route path="/admin/system-users" element={<ManageSystemUsers/>} />
-          
+
+
+             <Route path="/admin/system" element={<System/>} />
+             <Route path="/admin/notification" element={<NotificationSettings/>} />
+             <Route path="/admin/authentication" element={<AuthenticationSettings/>} />
+             <Route path="/admin/smsgateway" element={<SMSGatewaySettings/>} />
+             <Route path="/admin/privacypolicy" element={<PolicySettings/>} />
+             <Route path="/admin/returnpolicy" element={<ReturnPolicy/>} />
+             <Route path="/admin/shippingpolicy" element={<ShippingPolicy/>} />
+             <Route path="/admin/adminpolicy" element={<AdminPolicy/>} />
+
           </Route>
         </Route>
       </Routes>
