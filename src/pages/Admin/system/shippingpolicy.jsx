@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { 
   Truck, Save, RotateCcw, ChevronRight, 
   Clock, CheckCircle2, History, Eye, 
-  MapPin, AlertCircle 
+  MapPin, AlertCircle, Ship, Globe,
+  Activity, Shield, Sparkles
 } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function ShippingPolicy() {
   const [charCount, setCharCount] = useState(156);
@@ -13,115 +15,129 @@ export default function ShippingPolicy() {
   };
 
   return (
-    <div className="p-6 md:p-12 bg-slate-50 min-h-screen font-sans text-slate-900">
+    <div className="min-h-screen bg-background-site dark:bg-slate-950 p-6 md:p-10 text-text-pri dark:text-white transition-colors duration-500 font-sans pb-24">
       
-      {/* --- Header Section --- */}
-      <div className="max-w-5xl mx-auto mb-10">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div className="flex items-center gap-5">
-            <div className="p-4 bg-indigo-600 rounded-[1.5rem] shadow-xl shadow-indigo-100 text-white">
-              <Truck size={32} />
-            </div>
-            <div>
-              <div className="flex items-center gap-2 text-[10px] font-bold text-indigo-500 uppercase tracking-widest mb-1">
-                Store Settings <ChevronRight size={10} /> Logistics
-              </div>
-              <h1 className="text-3xl font-black text-slate-900 tracking-tight">Shipping Policy</h1>
-            </div>
+      {/* --- HEADER CONSOLE --- */}
+      <header className="max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center mb-16 gap-8 relative z-10">
+        <div className="space-y-3">
+          <div className="flex items-center gap-3 text-[10px] font-black text-primary dark:text-primary-light uppercase tracking-[0.4em]">
+            <Ship size={16} className="text-primary animate-pulse" />
+            <span>Distribution Protocol v5.1</span>
           </div>
-          
-          <div className="flex items-center gap-3 bg-white p-2 rounded-2xl border border-slate-200 shadow-sm">
-            <div className="flex items-center gap-2 px-4 py-2 border-r border-slate-100">
-              <Clock size={16} className="text-slate-400" />
-              <span className="text-xs font-bold text-slate-500">Auto-saved: 12:10 PM</span>
-            </div>
-            <button className="p-2 hover:bg-slate-50 rounded-xl text-slate-400 hover:text-indigo-600 transition-all" title="View History">
-              <History size={18} />
-            </button>
-          </div>
+          <h1 className="text-5xl font-black text-text-pri dark:text-white tracking-tighter uppercase leading-none">Shipping Registry</h1>
         </div>
-      </div>
 
-      <div className="max-w-5xl mx-auto">
-        
-        {/* --- Main Editor Card --- */}
-        <div className="bg-white rounded-[3rem] shadow-2xl shadow-slate-200/60 border border-slate-200 overflow-hidden">
+        <div className="flex items-center gap-4 bg-surface dark:bg-slate-900 p-3 rounded-[3rem] border border-slate-200 dark:border-slate-800 shadow-sm transition-all duration-500">
+          <div className="flex items-center gap-4 px-8 py-3 border-r border-primary/10">
+            <Clock size={18} className="text-primary" />
+            <span className="text-[10px] font-black text-slate-400 dark:text-slate-600 uppercase tracking-[0.3em]">Sync: 12:10_PM</span>
+          </div>
+          <button className="p-4 hover:bg-primary/5 rounded-full text-slate-300 dark:text-slate-700 hover:text-primary transition-all active:scale-90">
+            <History size={24} />
+          </button>
+        </div>
+      </header>
+
+      <main className="max-w-5xl mx-auto">
+        {/* --- Editor Matrix --- */}
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.98, y: 30 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          className="bg-surface dark:bg-slate-900 rounded-[4.5rem] border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden transition-all duration-700 relative group"
+        >
+          <div className="absolute top-0 right-0 -mr-20 -mt-20 w-40 h-40 bg-primary/5 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
           
           {/* Top Status Bar */}
-          <div className="px-10 py-4 bg-indigo-50/50 border-b border-indigo-100 flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></div>
-              <p className="text-xs font-bold text-indigo-700 uppercase tracking-tight">Deployment Ready</p>
+          <div className="px-12 py-6 bg-primary/5 dark:bg-primary/10 border-b border-primary/5 flex items-center justify-between relative z-10">
+            <div className="flex items-center gap-4">
+              <div className="w-3 h-3 rounded-full bg-primary animate-ping shadow-lg shadow-primary/50" />
+              <div className="h-3 w-3 bg-primary rounded-full absolute" />
+              <p className="text-[10px] font-black text-primary uppercase tracking-[0.4em] ml-2">Deployment Stream: HIGH_AVAILABILITY</p>
             </div>
-            <button className="flex items-center gap-2 text-xs font-bold text-indigo-600 hover:text-indigo-800 transition-colors">
-              <Eye size={14} /> Preview Policy Page
+            <button className="flex items-center gap-4 text-[10px] font-black text-primary uppercase tracking-[0.4em] hover:underline group/preview">
+              <Eye size={18} className="group-hover/preview:scale-110 transition-transform" /> <span className="hidden sm:inline">Initialize Policy Preview</span>
             </button>
           </div>
 
-          {/* Editor Toolbar */}
-          <div className="px-10 py-6 border-b border-slate-100 flex flex-wrap items-center justify-between gap-6">
-            <div className="flex items-center gap-3">
-              <div className="flex bg-slate-50 border border-slate-200 rounded-2xl p-1 shadow-inner">
-                <button className="px-5 py-2 hover:bg-white hover:shadow-sm rounded-xl text-slate-700 font-bold text-sm transition-all">B</button>
-                <button className="px-5 py-2 hover:bg-white hover:shadow-sm rounded-xl text-slate-700 italic font-serif text-sm transition-all">I</button>
-                <button className="px-5 py-2 hover:bg-white hover:shadow-sm rounded-xl text-slate-700 underline text-sm transition-all">U</button>
+          {/* Toolbar Nexus */}
+          <div className="px-12 py-8 border-b border-primary/5 flex flex-wrap items-center justify-between gap-10 relative z-10">
+            <div className="flex items-center gap-8">
+              <div className="flex bg-background-site dark:bg-slate-950 border border-slate-100 dark:border-slate-800 rounded-[1.5rem] p-1.5 shadow-inner">
+                {['B', 'I', 'U'].map((label, i) => (
+                  <button key={i} className={`px-8 py-3 hover:bg-surface dark:hover:bg-slate-900 rounded-xl text-text-pri dark:text-white font-black text-sm transition-all hover:scale-110 active:scale-90 ${i === 1 ? 'italic font-serif' : i === 2 ? 'underline' : ''}`}>
+                    {label}
+                  </button>
+                ))}
               </div>
-              <div className="h-8 w-[1px] bg-slate-200 mx-2"></div>
-              <div className="flex items-center gap-2 px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl">
-                 <MapPin size={14} className="text-slate-400" />
-                 <span className="text-xs font-bold text-slate-600">Standard Formatting</span>
+              <div className="w-px h-12 bg-primary/10" />
+              <div className="flex items-center gap-4 bg-background-site dark:bg-slate-950 px-8 py-4 rounded-[1.5rem] border border-primary/5 shadow-inner group/sync transition-all hover:border-primary/20">
+                 <MapPin size={18} className="text-primary group-hover:animate-bounce" />
+                 <span className="text-[10px] font-black text-slate-400 dark:text-slate-600 uppercase tracking-[0.3em]">Global Logistics Sync</span>
               </div>
             </div>
 
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2 bg-slate-100 px-4 py-2 rounded-full text-xs font-bold text-slate-400">
-                <CheckCircle2 size={14} className="text-emerald-500" />
-                {charCount.toLocaleString()} Characters
+            <div className="flex items-center gap-4 text-[11px] font-black text-slate-400 dark:text-slate-600 uppercase tracking-[0.4em]">
+              <div className="flex items-center gap-4 bg-background-site dark:bg-slate-950 px-8 py-4 rounded-full border border-primary/5 shadow-inner group/meta">
+                <CheckCircle2 size={18} className="text-emerald-500" />
+                Index: <span className="text-primary">{charCount.toLocaleString()}</span> METRICS
               </div>
             </div>
           </div>
 
-          {/* Textarea Area */}
-          <div className="p-10 md:p-14">
+          {/* Textarea Node */}
+          <div className="p-16 md:p-24 lg:p-32 relative group/nexus z-10">
+            <div className="flex items-center gap-4 mb-16">
+              <Sparkles size={24} className="text-primary animate-pulse" />
+              <span className="text-[10px] font-black text-primary uppercase tracking-[0.5em]">Distribution Editor: ACTIVE_STREAMS</span>
+            </div>
             <textarea
               onChange={handleContentChange}
-              className="w-full min-h-[500px] bg-transparent border-none outline-none text-slate-700 leading-[1.8] font-serif text-xl resize-none placeholder:text-slate-200"
-              placeholder="Detail your shipping methods, costs, and delivery times..."
+              className="w-full min-h-[550px] bg-transparent border-none outline-none text-text-pri dark:text-slate-200 leading-[2] font-serif text-2xl md:text-3xl resize-none placeholder:text-slate-100 dark:placeholder:text-slate-800 transition-all font-light"
+              placeholder="Detail distribution channels, cost matrices, and delivery timelines..."
               defaultValue="We offer standard shipping (3-5 business days) and express delivery (1-2 business days). Shipping costs are calculated at checkout based on weight and destination. Free shipping applies to orders over $50."
             />
           </div>
 
-          {/* Action Footer */}
-          <div className="px-10 py-10 bg-slate-50/80 border-t border-slate-100 flex flex-col lg:flex-row items-center justify-between gap-8">
-            <div className="flex items-center gap-4 p-5 bg-white border border-indigo-100 rounded-[2rem] shadow-sm max-w-md">
-              <div className="p-3 bg-amber-50 rounded-2xl text-amber-600">
-                <AlertCircle size={24} />
+          {/* Action Console */}
+          <div className="px-12 py-12 bg-background-site/80 dark:bg-slate-950/80 border-t border-primary/10 flex flex-col lg:flex-row items-center justify-between gap-12 relative z-10">
+            <div className="flex items-center gap-8 p-10 bg-surface dark:bg-slate-900 border border-amber-500/10 rounded-[3rem] shadow-inner max-w-xl group/alert hover:border-amber-500/30 transition-all duration-700">
+              <div className="w-16 h-16 bg-amber-500/5 dark:bg-amber-500/10 rounded-2xl text-amber-500 flex items-center justify-center shrink-0 shadow-inner group-hover:scale-110 transition-transform">
+                <AlertCircle size={32} />
               </div>
-              <p className="text-xs font-medium text-slate-500 leading-relaxed">
-                <span className="font-bold text-slate-700">Pro Tip:</span> Be sure to mention any holiday delays or international shipping restrictions to avoid customer support tickets.
-              </p>
+              <div className="space-y-2">
+                <span className="text-[10px] font-black text-text-pri dark:text-white uppercase tracking-[0.4em]">Operational Directive</span>
+                <p className="text-[11px] font-black text-slate-400 dark:text-slate-600 leading-relaxed uppercase tracking-tight italic">
+                  Disclose logistical variances or international regulatory restrictions to optimize global distribution success.
+                </p>
+              </div>
             </div>
 
-            <div className="flex items-center gap-4 w-full lg:w-auto">
-              <button className="flex-1 lg:flex-none flex items-center justify-center gap-2 px-10 py-5 bg-white border-2 border-slate-200 text-slate-600 rounded-[1.5rem] font-bold hover:bg-slate-100 transition-all active:scale-95">
-                <RotateCcw size={20} />
-                Discard
+            <div className="flex items-center gap-6 w-full lg:w-auto">
+              <button className="flex-1 lg:flex-none flex items-center justify-center gap-5 px-12 py-6 bg-surface dark:bg-slate-800 text-slate-400 dark:text-slate-600 hover:text-red-500 rounded-[2.5rem] font-black text-[11px] uppercase tracking-[0.4em] border border-slate-100 dark:border-slate-700/50 hover:border-red-500/20 transition-all active:scale-95 shadow-sm">
+                <RotateCcw size={24} />
+                ABORT_DRAFT
               </button>
-              <button className="flex-1 lg:flex-none flex items-center justify-center gap-2 px-14 py-5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-[1.5rem] font-bold shadow-2xl shadow-indigo-200 transition-all active:scale-[0.98]">
-                <Save size={20} />
-                Update Shipping Policy
+              <button className="group/btn flex-1 lg:flex-none flex items-center justify-center gap-6 px-16 py-6 bg-primary text-white rounded-[2.5rem] font-black text-[11px] uppercase tracking-[0.6em] shadow-3xl shadow-primary/40 hover:bg-black hover:-translate-y-2 transition-all active:scale-[0.98] relative overflow-hidden">
+                <div className="absolute inset-0 bg-white/10 -translate-x-full group-hover/btn:translate-x-0 transition-transform duration-700" />
+                <Save size={24} className="relative z-10" />
+                <span className="relative z-10">COMMIT_POLICY</span>
               </button>
             </div>
           </div>
-        </div>
+        </motion.div>
 
-        {/* --- Brand Footer --- */}
-        <div className="mt-12 text-center">
-          <p className="text-[10px] font-bold text-slate-300 uppercase tracking-[0.4em]">
-            Official Logistics Policy Management • v 4.4.1
+        {/* --- FOOTER TELEMETRY --- */}
+        <footer className="mt-24 text-center flex flex-col items-center gap-10 relative z-10">
+          <div className="flex items-center gap-10 opacity-20 filter grayscale hover:grayscale-0 transition-all duration-1000">
+            <Globe size={32} className="text-primary animate-spin-slow" />
+            <div className="h-px w-32 bg-gradient-to-r from-transparent via-primary to-transparent" />
+            <Truck size={32} className="text-primary" />
+          </div>
+          <p className="text-[10px] font-black text-slate-300 dark:text-slate-700 uppercase tracking-[0.8em]">
+            Distribution Registry: <span className="text-primary italic">ID-SHIP-NODE-EPSILON-V5</span>
           </p>
-        </div>
-      </div>
+        </footer>
+      </main>
     </div>
   );
 }

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Upload, X, ChevronDown, Save, RotateCcw } from 'lucide-react';
+import { Upload, X, ChevronDown, Save, RotateCcw, Plus, Activity, Shield, ChevronRight, Package, Image as ImageIcon, Video, CheckCircle2 } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function AddProduct() {
   const [productData, setProductData] = useState({
@@ -23,156 +24,212 @@ export default function AddProduct() {
   });
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-500 pb-10">
-      {/* Header */}
-      <div className="flex justify-between items-center">
-        <h2 className="text-xl font-bold text-[#4e5e7a]">Add Product</h2>
-        <p className="text-sm text-gray-500">
-          Home / <span className="text-purple-600">Add Product</span>
-        </p>
-      </div>
+    <div className="min-h-screen bg-background-site dark:bg-slate-950 p-6 md:p-10 text-text-pri dark:text-white transition-colors duration-500 font-sans pb-24">
+      
+      {/* --- HEADER CONSOLE --- */}
+      <header className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center mb-16 gap-8 relative z-10">
+        <div className="space-y-3">
+          <div className="flex items-center gap-3 text-[10px] font-black text-primary dark:text-primary-light uppercase tracking-[0.4em]">
+            <Plus size={16} className="text-primary animate-pulse" />
+            <span>Registry Vector v6.2</span>
+          </div>
+          <h1 className="text-5xl font-black text-text-pri dark:text-white tracking-tighter uppercase leading-none">Assemble Asset</h1>
+        </div>
+        
+        <div className="flex items-center gap-4 bg-surface dark:bg-slate-900 p-3 rounded-[2.5rem] shadow-sm border border-slate-200 dark:border-slate-800 transition-all">
+          <button 
+            type="button"
+            onClick={() => window.history.back()}
+            className="px-8 py-4 bg-background-site dark:bg-slate-800 border-2 border-transparent hover:border-slate-200 dark:hover:border-slate-700 rounded-[1.5rem] text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-primary transition-all active:scale-95"
+          >
+            TERMINAL_BACK
+          </button>
+          <div className="px-6 py-4 text-[10px] font-black text-primary dark:text-primary-light bg-primary/5 dark:bg-primary-light/5 rounded-[1.5rem] border border-primary/10 flex items-center gap-3">
+            <Activity size={18} /> Buffer Status: Ready
+          </div>
+        </div>
+      </header>
 
-      <form className="space-y-6">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <form className="max-w-7xl mx-auto space-y-12">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
           
           {/* LEFT COLUMN: Main Info */}
-          <div className="lg:col-span-8 space-y-6">
+          <div className="lg:col-span-8 space-y-10">
             {/* Product Information Card */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-              <div className="p-4 border-b flex justify-between items-center bg-gray-50/50">
-                <h3 className="font-bold text-[#4e5e7a]">Product Information</h3>
-                <button type="button" className="text-gray-400 hover:text-red-500"><X size={20} /></button>
-              </div>
-              <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-                <InputField label="Name" required placeholder="Product Name" />
-                <InputField label="Identification of Product" placeholder="Product Identification Number" />
-                <SelectField label="Made In" options={['Search for countries']} />
-                <SelectField label="Brand" options={['Search for brands']} />
-                <div className="md:col-span-1">
-                  <label className="block text-[10px] font-bold text-gray-500 uppercase mb-2">Tags (These tags help you in search result)</label>
-                  <input type="text" placeholder="Enter product tags" className="w-full border border-gray-200 rounded-lg p-2.5 text-sm outline-none focus:ring-1 focus:ring-purple-500" />
+            <section className="bg-surface dark:bg-slate-900 rounded-[4rem] border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden transition-all group">
+              <div className="px-12 py-10 border-b border-slate-50 dark:border-slate-800/50 bg-background-site/20 dark:bg-slate-950/20 flex justify-between items-center">
+                <div className="flex items-center gap-4">
+                    <div className="p-3 bg-primary/10 text-primary rounded-2xl">
+                        <Package size={22} />
+                    </div>
+                    <div>
+                        <h3 className="text-sm font-black text-text-pri dark:text-white uppercase tracking-widest">Metadata Core</h3>
+                        <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mt-1">Initialize Primary Spec</p>
+                    </div>
                 </div>
-                <InputField label="Product Type" value="Physical Product" readOnly />
-                <div className="md:col-span-2">
-                  <label className="block text-[10px] font-bold text-gray-500 uppercase mb-2">Short Description <span className="text-red-500">*</span></label>
-                  <textarea rows="3" placeholder="Product Short Description" className="w-full border border-gray-200 rounded-lg p-2.5 text-sm outline-none focus:ring-1 focus:ring-purple-500"></textarea>
+                <button type="button" className="w-12 h-12 flex items-center justify-center hover:bg-red-500/10 text-slate-400 hover:text-red-500 rounded-2xl transition-all border border-transparent hover:border-red-500/10"><X size={24} /></button>
+              </div>
+              <div className="p-12 grid grid-cols-1 md:grid-cols-2 gap-10">
+                <InputField label="Visual Label" required placeholder="Display Name for Storefront" />
+                <InputField label="Identity Sequence" placeholder="SKU / Serial ID" />
+                <SelectField label="Origin Cluster" options={['Select Country of Manufacture', 'India', 'USA', 'Germany']} />
+                <SelectField label="Architectural Brand" options={['Select Brand Identity', 'Kalki Premium', 'Global Spices']} />
+                <div className="md:col-span-1 space-y-4">
+                  <label className="text-[10px] font-black text-slate-400 dark:text-slate-600 uppercase tracking-widest ml-2">Registry Keywords</label>
+                  <input type="text" placeholder="Tag stream (comma separated)" className="w-full bg-background-site dark:bg-slate-950 border-2 border-transparent focus:border-primary/10 rounded-[2rem] px-8 py-5 text-sm font-black text-text-pri dark:text-white outline-none transition-all placeholder:text-slate-200 shadow-inner" />
+                </div>
+                <InputField label="Vector Archetype" value="Physical Asset" readOnly />
+                <div className="md:col-span-2 space-y-4">
+                  <label className="text-[10px] font-black text-slate-400 dark:text-slate-600 uppercase tracking-widest ml-2">Executive Summary <span className="text-primary">*</span></label>
+                  <textarea rows="4" placeholder="Brief architectural overview of the asset..." className="w-full bg-background-site dark:bg-slate-950 border-2 border-transparent focus:border-primary/10 rounded-[2.5rem] px-8 py-6 text-sm font-black text-text-pri dark:text-white outline-none transition-all placeholder:text-slate-200 shadow-inner resize-none"></textarea>
                 </div>
               </div>
-            </div>
+            </section>
 
             {/* Product Tax & Video */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h3 className="font-bold text-[#4e5e7a] mb-4 border-b pb-2">Product Tax</h3>
-                <div className="space-y-4">
-                  <label className="block text-[10px] font-bold text-gray-500 uppercase">Tax</label>
-                  <div className="flex items-center gap-2 border border-gray-200 rounded-lg p-2 bg-gray-50">
-                    <span className="bg-purple-600 text-white text-xs px-2 py-1 rounded flex items-center gap-1">
-                      <X size={12} /> No Taxes Are Added
-                    </span>
-                    <input type="text" className="bg-transparent outline-none text-sm flex-1" />
-                    <X size={14} className="text-gray-400" />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+              <section className="bg-surface dark:bg-slate-900 rounded-[4rem] border border-slate-200 dark:border-slate-800 shadow-sm p-12 space-y-10 group relative overflow-hidden">
+                <div className="absolute top-0 right-0 -mr-20 -mt-20 w-40 h-40 bg-primary/5 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
+                <h3 className="text-xs font-black text-text-pri dark:text-white uppercase tracking-[0.3em] border-b border-slate-100 dark:border-slate-800 pb-6 flex items-center gap-3">
+                    <Shield size={18} className="text-primary" /> Fiscal Policy
+                </h3>
+                <div className="space-y-8 relative z-10">
+                  <div className="space-y-4">
+                    <label className="text-[10px] font-black text-slate-400 dark:text-slate-600 uppercase tracking-widest ml-2">Tax Logic Engine</label>
+                    <div className="flex flex-wrap items-center gap-3 bg-background-site dark:bg-slate-950 border-2 border-transparent focus-within:border-primary/10 rounded-[2rem] p-4 shadow-inner">
+                      <span className="bg-primary text-white text-[9px] font-black px-4 py-2 rounded-full flex items-center gap-3 uppercase tracking-widest shadow-lg shadow-primary/20 transition-all hover:scale-105">
+                        <X size={12} className="cursor-pointer" /> NO_TAX_ACTIVE
+                      </span>
+                      <input type="text" placeholder="Add protocol..." className="bg-transparent outline-none text-sm font-black text-text-pri dark:text-white flex-1 min-w-[100px]" />
+                    </div>
                   </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-bold text-gray-500 uppercase">Tax Included in prices?</span>
-                    <Switch />
+                  <div className="flex items-center justify-between p-6 bg-background-site/50 dark:bg-slate-950/20 rounded-[2rem] border border-slate-100 dark:border-slate-800 transition-all hover:border-primary/20">
+                    <span className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em]">Inclusive Protocol</span>
+                    <Switch checked={productData.taxIncluded} onChange={() => setProductData({...productData, taxIncluded: !productData.taxIncluded})} />
                   </div>
                 </div>
-              </div>
+              </section>
 
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h3 className="font-bold text-[#4e5e7a] mb-4 border-b pb-2">Product Video Type</h3>
-                <SelectField label="Video Type" options={['None', 'Youtube', 'Vimeo', 'Self Hosted']} />
-              </div>
+              <section className="bg-surface dark:bg-slate-900 rounded-[4rem] border border-slate-200 dark:border-slate-800 shadow-sm p-12 space-y-10 group relative overflow-hidden">
+                 <div className="absolute top-0 right-0 -mr-20 -mt-20 w-40 h-40 bg-primary/5 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
+                <h3 className="text-xs font-black text-text-pri dark:text-white uppercase tracking-[0.3em] border-b border-slate-100 dark:border-slate-800 pb-6 flex items-center gap-3">
+                    <Video size={18} className="text-primary" /> Media Stream
+                </h3>
+                <div className="relative z-10">
+                    <SelectField label="Video Interface Protocol" options={['None', 'Youtube-Nexus', 'Vimeo-Archway', 'Self-Hosted Buffer']} />
+                </div>
+              </section>
             </div>
           </div>
 
           {/* RIGHT COLUMN: Categories */}
-          <div className="lg:col-span-4">
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 h-full">
-              <div className="p-4 border-b bg-gray-50/50">
-                <h3 className="font-bold text-[#4e5e7a]">Categories</h3>
+          <div className="lg:col-span-4 lg:sticky lg:top-10 h-fit space-y-10">
+            <section className="bg-surface dark:bg-slate-900 rounded-[4rem] border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col overflow-hidden transition-all group">
+              <div className="px-10 py-10 border-b border-slate-50 dark:border-slate-800/50 bg-background-site/20 dark:bg-slate-950/20">
+                <h3 className="text-sm font-black text-text-pri dark:text-white uppercase tracking-widest flex items-center gap-3">
+                   <Grid size={20} className="text-primary" /> Hierarchy Hub
+                </h3>
               </div>
-              <div className="p-6">
-                <label className="block text-[10px] font-bold text-gray-500 uppercase mb-4">Select Category <span className="text-red-500">*</span></label>
-                <div className="space-y-3 border border-gray-100 p-4 rounded-lg bg-gray-50/30">
-                  <CategoryItem label="Ready Mix Masala" />
-                  <CategoryItem label="Khada Masala" />
-                  <CategoryItem label="Spices Powders" />
+              <div className="p-10 space-y-8 max-h-[600px] overflow-y-auto custom-scrollbar">
+                <div className="space-y-6">
+                  <label className="text-[10px] font-black text-slate-400 dark:text-slate-600 uppercase tracking-widest ml-2">Domain Selection <span className="text-primary">*</span></label>
+                  <div className="space-y-4 p-8 bg-background-site/50 dark:bg-slate-950/30 rounded-[3rem] border border-slate-100 dark:border-slate-800 shadow-inner">
+                    <CategoryItem label="Ready Mix Masala" icon="🌶️" />
+                    <CategoryItem label="Khada Masala" icon="🌿" />
+                    <CategoryItem label="Spices Powders" icon="✨" />
+                  </div>
                 </div>
               </div>
-            </div>
+              <footer className="p-10 bg-background-site/10 dark:bg-slate-950/10 border-t border-slate-100 dark:border-slate-800 text-center">
+                 <p className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em]">Select multiple for cross-domain association</p>
+              </footer>
+            </section>
           </div>
         </div>
 
         {/* Product Images Section */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <h3 className="font-bold text-[#4e5e7a] mb-6 border-b pb-2">Product Images</h3>
-          <div className="space-y-6">
-            <ImageUploadBox label="Main Image" recommended="180 x 180 pixels" />
-            <ImageUploadBox label="Other Images" recommended="180 x 180 pixels" />
+        <section className="bg-surface dark:bg-slate-900 rounded-[5rem] border border-slate-200 dark:border-slate-800 shadow-sm p-16 space-y-12 transition-all group">
+          <div className="flex items-center gap-6 border-b border-slate-100 dark:border-slate-800 pb-10">
+             <div className="w-2 h-10 bg-primary rounded-full" />
+             <h3 className="text-2xl font-black text-text-pri dark:text-white uppercase tracking-[0.2em]">Visual Artifacts</h3>
           </div>
-        </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
+            <ImageUploadBox label="Primary Frame (Hero)" recommended="500 x 500 PX | 300 DPI" />
+            <ImageUploadBox label="Secondary Gallery Nodes" recommended="500 x 500 PX | 72 DPI" multipayload />
+          </div>
+        </section>
 
         {/* Product Quantity & Other */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <h3 className="font-bold text-[#4e5e7a] mb-6 border-b pb-2">Product Quantity & Other</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <SelectField label="Indicator" options={['None', 'Veg', 'Non-Veg']} />
-            <InputField label="Total Allowed Quantity" type="number" value="1" />
-            <InputField label="Minimum Order Quantity" type="number" value="1" />
-            <InputField label="Warranty Period" placeholder="Warranty Period if any" />
-            <InputField label="Guarantee Period" placeholder="Guarantee Period if any" />
-            <InputField label="Quantity Step Size" type="number" value="1" />
+        <section className="bg-surface dark:bg-slate-900 rounded-[5rem] border border-slate-200 dark:border-slate-800 shadow-sm p-16 space-y-12 transition-all group">
+          <div className="flex items-center gap-6 border-b border-slate-100 dark:border-slate-800 pb-10">
+             <div className="w-2 h-10 bg-primary rounded-full" />
+             <h3 className="text-2xl font-black text-text-pri dark:text-white uppercase tracking-[0.2em]">Operational Pulse</h3>
           </div>
-        </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+            <SelectField label="Dietary Indicator Tag" options={['None', 'Verified Veg', 'Verified Non-Veg', 'Universal']} />
+            <InputField label="Max Throughput (Capacity)" type="number" defaultValue="1" />
+            <InputField label="Minimum Order Floor" type="number" defaultValue="1" />
+            <InputField label="Warranty Lifecycle" placeholder="Period (e.g. 1 Year Cluster)" />
+            <InputField label="Guarantee Matrix" placeholder="Period (e.g. 6 Month Buffer)" />
+            <InputField label="Scale / Step Size" type="number" defaultValue="1" />
+          </div>
+        </section>
 
         {/* Description Section */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-          <div className="p-4 border-b bg-gray-50/50">
-            <h3 className="font-bold text-[#4e5e7a]">Description</h3>
+        <section className="bg-surface dark:bg-slate-900 rounded-[5rem] border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden transition-all group">
+          <div className="px-16 py-12 border-b border-slate-50 dark:border-slate-800/50 bg-background-site/20 dark:bg-slate-950/20 flex items-center gap-6">
+            <div className="w-2 h-10 bg-primary rounded-full" />
+            <h3 className="text-2xl font-black text-text-pri dark:text-white uppercase tracking-[0.2em]">Technical Specification</h3>
           </div>
-          <div className="p-6">
-            <div className="border border-gray-200 rounded-lg overflow-hidden">
-              {/* Mock Toolbar to match TinyMCE/Editor look in image */}
-              <div className="bg-gray-50 border-b p-2 flex flex-wrap gap-4 text-gray-500 border-gray-200">
-                <span className="text-xs border-r pr-4">File Edit View Insert Format</span>
-                <span className="text-xs">Paragraph</span>
-                <span className="text-xs">12pt</span>
+          <div className="p-16">
+            <div className="border border-slate-100 dark:border-slate-800 rounded-[3rem] overflow-hidden bg-background-site/50 dark:bg-slate-950/30 shadow-inner">
+              <div className="bg-surface dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800 p-8 flex flex-wrap gap-8 text-[11px] font-black text-slate-400 uppercase tracking-widest">
+                <div className="border-r border-slate-200 dark:border-slate-800 pr-8 flex gap-6">
+                  <span className="hover:text-primary cursor-pointer transition-colors px-2">File</span>
+                  <span className="hover:text-primary cursor-pointer transition-colors px-2">Edit</span>
+                  <span className="hover:text-primary cursor-pointer transition-colors px-2">Protocol</span>
+                </div>
+                <div className="flex gap-8 items-center">
+                  <span className="text-primary bg-primary/5 px-4 py-2 rounded-full border border-primary/10">Rich-Text-Terminal</span>
+                  <span className="opacity-50">UTF-8 Encoding</span>
+                </div>
               </div>
               <textarea 
-                rows="10" 
-                placeholder="Place some text here"
-                className="w-full p-4 outline-none text-sm"
+                rows="12" 
+                placeholder="Initialize global specification matrix..."
+                className="w-full p-12 bg-transparent outline-none text-base font-medium text-text-pri/70 dark:text-white/60 placeholder:text-slate-200 dark:placeholder:text-slate-800 resize-none font-mono"
               ></textarea>
             </div>
           </div>
-        </div>
+        </section>
 
         {/* Form Actions */}
-        <div className="flex justify-end gap-4 mt-8">
-          <button type="reset" className="bg-[#ffc107] text-white px-8 py-2.5 rounded-lg font-bold shadow-md hover:bg-[#e0a800] transition-colors flex items-center gap-2">
-            <RotateCcw size={18} /> Reset
+        <section className="flex flex-col sm:flex-row justify-end gap-6 pb-32 max-w-7xl mx-auto">
+          <button type="reset" className="group flex items-center justify-center gap-4 bg-background-site dark:bg-slate-800 text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 hover:text-red-500 px-12 py-6 rounded-[2rem] text-[10px] font-black uppercase tracking-[0.3em] transition-all active:scale-95 shadow-sm border border-transparent hover:border-red-500/10">
+            <RotateCcw size={20} className="group-hover:-rotate-180 transition-transform duration-700" /> 
+            Purge Local Buffer
           </button>
-          <button type="submit" className="bg-[#71dd37] text-white px-8 py-2.5 rounded-lg font-bold shadow-md hover:bg-[#61be2f] transition-colors flex items-center gap-2">
-            <Save size={18} /> Add Product
+          <button type="submit" className="group flex items-center justify-center gap-4 bg-primary hover:bg-black text-white px-20 py-6 rounded-[2rem] text-[10px] font-black uppercase tracking-[0.4em] transition-all active:scale-95 shadow-2xl shadow-primary/30 relative overflow-hidden">
+            <div className="absolute inset-0 bg-white/10 -translate-x-full group-hover:translate-x-0 transition-transform duration-700 font-mono" />
+            <Save size={20} className="relative z-10 transition-transform group-hover:scale-125" /> 
+            <span className="relative z-10">Execute Global Registry</span>
           </button>
-        </div>
+        </section>
       </form>
     </div>
   );
 }
 
-/* Internal Sub-components for cleaner code */
+/* Internal Sub-components */
 
 function InputField({ label, required, ...props }) {
   return (
-    <div>
-      <label className="block text-[10px] font-bold text-gray-500 uppercase mb-2">
-        {label} {required && <span className="text-red-500">*</span>}
+    <div className="space-y-4">
+      <label className="text-[10px] font-black text-slate-400 dark:text-slate-600 uppercase tracking-widest ml-2">
+        {label} {required && <span className="text-primary">*</span>}
       </label>
       <input 
-        className="w-full border border-gray-200 rounded-lg p-2.5 text-sm outline-none focus:ring-1 focus:ring-purple-500"
+        className="w-full bg-background-site dark:bg-slate-950 border-2 border-transparent focus:border-primary/10 rounded-[2rem] px-8 py-5 text-sm font-black text-text-pri dark:text-white outline-none transition-all placeholder:text-slate-200 shadow-inner"
         {...props} 
       />
     </div>
@@ -181,49 +238,68 @@ function InputField({ label, required, ...props }) {
 
 function SelectField({ label, options }) {
   return (
-    <div>
-      <label className="block text-[10px] font-bold text-gray-500 uppercase mb-2">{label}</label>
-      <div className="relative">
-        <select className="w-full border border-gray-200 rounded-lg p-2.5 text-sm outline-none focus:ring-1 focus:ring-purple-500 appearance-none bg-white">
+    <div className="space-y-4">
+      <label className="text-[10px] font-black text-slate-400 dark:text-slate-600 uppercase tracking-widest ml-2">{label}</label>
+      <div className="relative group/filter-select">
+        <select className="w-full bg-background-site dark:bg-slate-950 border-2 border-transparent focus:border-primary/10 rounded-[2rem] px-8 py-5 text-sm font-black text-text-pri dark:text-white outline-none appearance-none cursor-pointer transition-all shadow-inner">
           {options.map(opt => <option key={opt}>{opt}</option>)}
         </select>
-        <ChevronDown size={14} className="absolute right-3 top-3.5 text-gray-400 pointer-events-none" />
+        <ChevronDown size={20} className="absolute right-6 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within/filter-select:text-primary group-focus-within/filter-select:rotate-180 transition-all duration-500 pointer-events-none" />
       </div>
     </div>
   );
 }
 
-function CategoryItem({ label }) {
+function CategoryItem({ label, icon }) {
   return (
-    <div className="flex items-center gap-2">
-      <input type="checkbox" className="rounded border-gray-300 text-purple-600 focus:ring-purple-500" />
-      <span className="text-sm text-gray-600 flex items-center gap-2">
-        📂 {label}
-      </span>
-    </div>
-  );
-}
-
-function ImageUploadBox({ label, recommended }) {
-  return (
-    <div className="space-y-2">
-      <label className="block text-[10px] font-bold text-gray-500 uppercase">{label}</label>
-      <div className="border-2 border-dashed border-blue-200 rounded-xl p-8 flex flex-col items-center justify-center bg-blue-50/20 hover:bg-blue-50/50 transition-colors cursor-pointer group">
-        <div className="bg-white p-4 rounded-lg shadow-sm group-hover:scale-110 transition-transform">
-          <Upload size={32} className="text-gray-400" />
+    <label className="group relative flex items-center justify-between p-5 bg-surface dark:bg-slate-900 rounded-[2rem] border-2 border-transparent hover:border-primary/20 transition-all cursor-pointer shadow-sm active:scale-[0.98]">
+      <div className="flex items-center gap-5">
+        <div className="w-12 h-12 rounded-2xl bg-background-site dark:bg-slate-950 flex items-center justify-center text-xl shadow-inner group-hover:scale-110 transition-transform duration-500">
+          {icon}
         </div>
-        <p className="mt-4 text-sm text-gray-600">Drop your image here, or <span className="text-blue-500 font-medium">browse</span></p>
-        <p className="text-[10px] text-gray-400 mt-1">Recommended Size : {recommended}</p>
+        <span className="text-xs font-black text-text-pri/80 dark:text-white/80 uppercase tracking-tight group-hover:text-primary transition-colors">
+          {label}
+        </span>
+      </div>
+      <div className="relative flex items-center">
+        <input type="checkbox" className="peer sr-only" />
+        <div className="w-6 h-6 rounded-lg border-2 border-slate-100 dark:border-slate-800 peer-checked:bg-primary peer-checked:border-primary transition-all flex items-center justify-center">
+           <CheckCircle2 size={14} className="text-white opacity-0 peer-checked:opacity-100 transition-opacity" />
+        </div>
+      </div>
+    </label>
+  );
+}
+
+function ImageUploadBox({ label, recommended, multipayload }) {
+  return (
+    <div className="space-y-8 flex-1">
+      <label className="text-[10px] font-black text-slate-400 dark:text-slate-600 uppercase tracking-widest ml-2">{label}</label>
+      <div className="border-4 border-dashed border-slate-100 dark:border-slate-800 rounded-[4rem] p-16 flex flex-col items-center justify-center bg-background-site/30 dark:bg-slate-950/20 hover:bg-surface dark:hover:bg-slate-900 transition-all cursor-pointer group relative overflow-hidden">
+        <div className="absolute inset-0 bg-primary opacity-0 group-hover:opacity-[0.03] transition-opacity duration-700" />
+        <div className="relative z-10 p-8 bg-surface dark:bg-slate-950 rounded-[2.5rem] shadow-2xl border border-slate-100 dark:border-slate-800 group-hover:scale-110 group-hover:rotate-12 transition-all duration-700 group-hover:text-primary group-hover:border-primary/20">
+          <Upload size={48} className="transition-transform group-hover:scale-110" />
+        </div>
+        <div className="mt-10 text-center space-y-3 relative z-10">
+          <p className="text-xl font-black text-text-pri dark:text-white uppercase tracking-tight group-hover:text-primary transition-colors">Inject Payload</p>
+          <p className="text-[10px] text-slate-400 font-black uppercase tracking-[0.2em]">Drag and Drop or <span className="text-primary cursor-pointer hover:underline">Scan Terminal</span></p>
+          <div className="flex items-center justify-center gap-3 mt-4">
+             <div className="px-5 py-2 bg-background-site dark:bg-slate-950 rounded-full border border-slate-100 dark:border-slate-800 text-[9px] font-black text-slate-400 dark:text-slate-600 uppercase tracking-widest shadow-inner">
+                {recommended}
+             </div>
+             {multipayload && <span className="text-[9px] font-black text-primary uppercase tracking-widest bg-primary/5 px-4 py-2 rounded-full border border-primary/10">Multi-Array</span>}
+          </div>
+        </div>
       </div>
     </div>
   );
 }
 
-function Switch() {
+function Switch({ checked, onChange }) {
   return (
-    <label className="relative inline-flex items-center cursor-pointer">
-      <input type="checkbox" className="sr-only peer" />
-      <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600"></div>
+    <label className="relative inline-flex items-center cursor-pointer group/toggle">
+      <input type="checkbox" className="sr-only peer" checked={checked} onChange={onChange} />
+      <div className="w-16 h-8 bg-slate-200 dark:bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-8 peer-checked:after:border-white after:content-[''] after:absolute after:top-[4px] after:left-[4px] after:bg-white after:rounded-full after:h-[24px] after:w-[24px] after:transition-all duration-500 peer-checked:bg-primary shadow-inner ring-offset-4 ring-offset-surface dark:ring-offset-slate-900 peer-checked:ring-4 peer-checked:ring-primary/20" />
     </label>
   );
 }

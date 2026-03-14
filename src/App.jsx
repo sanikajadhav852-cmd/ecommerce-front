@@ -76,6 +76,8 @@ import PolicySettings from "./pages/Admin/system/privacypolicy";
 import ReturnPolicy from "./pages/Admin/system/returnpolicy";
 import ShippingPolicy from "./pages/Admin/system/shippingpolicy";
 import AdminPolicy from "./pages/Admin/system/adminpolicy";
+import AboutSettings from "./pages/Admin/system/about";
+import ContactSettings from "./pages/Admin/system/contact";
 
 function App() {
   const { theme, toggleTheme } = useThemeStore();
@@ -263,6 +265,8 @@ function App() {
              <Route path="/admin/returnpolicy" element={<ReturnPolicy/>} />
              <Route path="/admin/shippingpolicy" element={<ShippingPolicy/>} />
              <Route path="/admin/adminpolicy" element={<AdminPolicy/>} />
+             <Route path="/admin/about" element={<AboutSettings/>} />
+             <Route path="/admin/contact" element={<ContactSettings/>} />
 
           </Route>
         </Route>

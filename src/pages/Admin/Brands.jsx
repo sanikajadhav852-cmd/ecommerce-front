@@ -1,25 +1,23 @@
-// src/pages/admin/Brands.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
+import api from "../../lib/api";
 import { 
-  Search, RefreshCw, ListFilter, Download, 
-  Upload, MoreVertical, Trash2, Edit, X, CheckCircle, Image as ImageIcon, RotateCcw 
-} from 'lucide-react';
-import api from '../../lib/api';
+  Building2, Plus, Trash2, Search, RotateCw, X, 
+  CheckCircle, Shield, Activity, Globe, Image as ImageIcon,
+  MoreVertical, Edit2, ArrowUpRight, Zap
+} from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function Brands() {
   const [brands, setBrands] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState({ name: '' });
-  const [imagePreview, setImagePreview] = useState(null);
-  const [selectedMediaId, setSelectedMediaId] = useState(null); // ← new
-
-  // Modal states (copied from Categories/Sliders)
+  const [name, setName] = useState("");
+  const [loading, setLoading] = useState(true);
   const [showMediaModal, setShowMediaModal] = useState(false);
   const [mediaItems, setMediaItems] = useState([]);
+  const [selectedMedia, setSelectedMedia] = useState(null);
   const [mediaLoading, setMediaLoading] = useState(false);
-  const [mediaSearch, setMediaSearch] = useState('');
+  const [mediaSearch, setMediaSearch] = useState("");
 
-  const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+  const baseUrl = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
   useEffect(() => {
     fetchBrands();
@@ -28,111 +26,60 @@ export default function Brands() {
   const fetchBrands = async () => {
     try {
       setLoading(true);
-      const response = await api.get('/admin/brands');
-      setBrands(response.data || []);
+      const res = await api.get("/brands");
+      setBrands(res.data.brands || []);
     } catch (err) {
-      console.error("Error fetching brands:", err);
+      console.error(err);
     } finally {
-      setLoading(false);
+      setTimeout(() => setLoading(false), 600);
     }
   };
 
-  // Fetch media when modal opens
-  useEffect(() => {
-    if (showMediaModal) {
-      fetchMediaItems();
+  const handleAddBrand = async (e) => {
+    e.preventDefault();
+    if (!name || !selectedMedia) {
+      alert("Please provide identity label and visual asset.");
+      return;
     }
-  }, [showMediaModal]);
+    try {
+      await api.post("/brands", { name, image_id: selectedMedia.id });
+      setName("");
+      setSelectedMedia(null);
+      fetchBrands();
+    } catch (err) {
+      console.error(err);
+      alert("Failed to commit brand identity.");
+    }
+  };
+
+  const handleDelete = async (id) => {
+    if (!window.confirm("Are you sure you want to purge this identity node?")) return;
+    try {
+      await api.delete(`/brands/${id}`);
+      fetchBrands();
+    } catch (err) {
+      console.error(err);
+      alert("Failed to purge identity.");
+    }
+  };
+
+  // Media Logic
+  const openMediaSelector = () => {
+    setShowMediaModal(true);
+    fetchMediaItems();
+  };
 
   const fetchMediaItems = async () => {
     setMediaLoading(true);
     try {
-      const res = await api.get('/media');
+      const res = await api.get("/media");
       if (res.data.success) {
-        const imagesOnly = res.data.data.filter(item => 
-          item.type?.startsWith('image/') || 
-          ['jpg','jpeg','png','webp','gif'].includes(item.extension?.toLowerCase())
-        );
-        setMediaItems(imagesOnly);
+        setMediaItems(res.data.data.filter(item => item.type?.startsWith("image/")));
       }
     } catch (err) {
-      console.error('Failed to load media:', err);
+      console.error(err);
     } finally {
       setMediaLoading(false);
-    }
-  };
-
-  const openMediaSelector = () => {
-    setShowMediaModal(true);
-    setMediaSearch('');
-  };
-
-  const selectMediaItem = (item) => {
-    const imageUrl = item.thumbnail || `${item.path}${item.name}`;
-    const fullUrl = imageUrl.startsWith('http')
-      ? imageUrl
-      : `${baseUrl}/${imageUrl.replace(/^\/+/, '')}`;
-
-    setImagePreview(fullUrl);
-    setSelectedMediaId(item.id);
-    setShowMediaModal(false);
-  };
-
-  const handleDirectUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setImagePreview(URL.createObjectURL(file));
-      setSelectedMediaId(null); // clear media ID if direct upload
-    }
-  };
-
-  const clearImage = () => {
-    setImagePreview(null);
-    setSelectedMediaId(null);
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    if (!formData.name.trim()) {
-      alert('Brand name is required');
-      return;
-    }
-
-    if (!imagePreview) {
-      alert('Brand image is required');
-      return;
-    }
-
-    setLoading(true);
-    try {
-      const payload = new FormData();
-      payload.append('name', formData.name.trim());
-
-      if (selectedMediaId) {
-        payload.append('media_id', selectedMediaId); // ← send media ID
-      } else {
-        // If direct upload was used, append file (optional fallback)
-        const fileInput = document.getElementById('brandImage');
-        if (fileInput?.files?.[0]) {
-          payload.append('image', fileInput.files[0]);
-        }
-      }
-
-      await api.post('/admin/brands', payload, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-      });
-
-      alert('Brand added successfully!');
-      setFormData({ name: '' });
-      setImagePreview(null);
-      setSelectedMediaId(null);
-      fetchBrands(); // refresh list
-    } catch (err) {
-      console.error('Error adding brand:', err);
-      alert(err.response?.data?.message || 'Failed to add brand');
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -141,306 +88,270 @@ export default function Brands() {
   );
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-500">
-      {/* Page Header */}
-      <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-slate-700">Manage Brands</h1>
-        <div className="flex items-center gap-2 text-sm text-gray-500">
-          <span>Home</span>
-          <span>/</span>
-          <span className="font-semibold text-purple-600">Brands</span>
+    <div className="min-h-screen bg-background-site dark:bg-slate-950 p-6 md:p-10 text-text-pri dark:text-white transition-colors duration-500 font-sans">
+      
+      {/* --- HEADER CONSOLE --- */}
+      <header className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center mb-16 gap-8 relative z-10">
+        <div className="space-y-3">
+          <div className="flex items-center gap-3 text-[10px] font-black text-primary dark:text-primary-light uppercase tracking-[0.4em]">
+            <Globe size={16} className="text-primary animate-pulse" />
+            <span>Identity Nexus Alpha</span>
+          </div>
+          <h1 className="text-5xl font-black text-text-pri dark:text-white tracking-tighter uppercase leading-none">Identity Nexus</h1>
         </div>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         
-        {/* LEFT SIDE: Add Brand Form */}
-        <div className="lg:col-span-4">
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-            <form onSubmit={handleSubmit} className="space-y-5">
-              <div>
-                <label className="block text-xs font-bold text-gray-500 uppercase mb-2">
-                  Name <span className="text-red-500">*</span>
-                </label>
+        <div className="flex items-center gap-4 bg-surface dark:bg-slate-900 p-3 rounded-[2.5rem] shadow-sm border border-slate-200 dark:border-slate-800 transition-all">
+          <div className="px-6 py-4 text-[10px] font-black text-primary dark:text-primary-light bg-primary/5 dark:bg-primary-light/5 rounded-[1.5rem] border border-primary/10 dark:border-primary-light/10 flex items-center gap-3">
+            <Activity size={18} /> Network Integrity: 100%
+          </div>
+          <button 
+            onClick={fetchBrands}
+            className="p-4 text-slate-400 hover:text-primary dark:hover:text-primary-light hover:bg-background-site dark:hover:bg-slate-800 rounded-2xl transition-all"
+          >
+            <RotateCw size={22} className={loading ? "animate-spin" : ""} />
+          </button>
+        </div>
+      </header>
+
+      <main className="max-w-7xl mx-auto grid grid-cols-1 xl:grid-cols-12 gap-12 items-start">
+        
+        {/* LEFT: MANAGEMENT FORM */}
+        <div className="xl:col-span-4 space-y-8">
+          <section className="bg-surface dark:bg-slate-900 rounded-[4rem] border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden sticky top-10 transition-all group">
+            <div className="p-12 border-b border-slate-100 dark:border-slate-800 bg-background-site/30 dark:bg-slate-950/30 flex items-center gap-6">
+                <div className="p-4 bg-primary text-white rounded-[1.5rem] shadow-xl shadow-primary/20">
+                    <Building2 size={24} />
+                </div>
+                <div>
+                   <h2 className="text-xl font-black text-text-pri dark:text-white uppercase tracking-tight">Node Forge</h2>
+                   <p className="text-[10px] font-black text-slate-400 dark:text-slate-600 uppercase tracking-[0.3em] mt-1">Identity Configuration</p>
+                </div>
+            </div>
+
+            <form onSubmit={handleAddBrand} className="p-12 space-y-10">
+              <div className="space-y-4">
+                <label className="block text-[10px] font-black text-slate-400 dark:text-slate-600 uppercase ml-2 tracking-[0.3em]">Identity Label</label>
                 <input 
                   type="text" 
-                  placeholder="Brand Name"
-                  className="w-full border border-gray-200 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-purple-500/20 outline-none transition-all"
-                  value={formData.name}
-                  onChange={(e) => setFormData({...formData, name: e.target.value})}
+                  value={name} 
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Registry Name..." 
+                  className="w-full bg-background-site dark:bg-slate-100/5 border-2 border-transparent focus:border-primary/20 rounded-[2rem] p-6 text-sm font-black text-text-pri dark:text-white outline-none transition-all shadow-inner" 
                 />
               </div>
 
-              <div>
-                <label className="block text-xs font-bold text-gray-500 uppercase mb-2">
-                  Main Image <span className="text-red-500">*</span> 
-                  <span className="text-[10px] lowercase font-normal ml-1">(Recommended Size : 131 x 131 pixels)</span>
-                </label>
+              <div className="space-y-4">
+                <label className="block text-[10px] font-black text-slate-400 dark:text-slate-600 uppercase ml-2 tracking-[0.3em]">Visual Asset</label>
+                <div 
+                  onClick={openMediaSelector}
+                  className="relative group/asset cursor-pointer overflow-hidden rounded-[3rem] border-4 border-dashed border-slate-100 dark:border-slate-800 bg-background-site/50 dark:bg-slate-910/50 hover:bg-primary/5 dark:hover:bg-primary/10 hover:border-primary/20 transition-all aspect-video flex flex-col items-center justify-center p-8 gap-4"
+                >
+                  {selectedMedia ? (
+                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="absolute inset-0">
+                      <img 
+                        src={selectedMedia.thumbnail ? (selectedMedia.thumbnail.startsWith('http') ? selectedMedia.thumbnail : `${baseUrl}/${selectedMedia.thumbnail}`) : `${baseUrl}/${selectedMedia.path}${selectedMedia.name}`} 
+                        className="w-full h-full object-cover grayscale opacity-50 group-hover/asset:opacity-20 transition-all duration-700" 
+                        alt="selected"
+                      />
+                      <div className="absolute inset-0 flex items-center justify-center">
+                         <div className="p-6 bg-white dark:bg-slate-900 rounded-[2rem] shadow-2xl flex items-center gap-4">
+                            <CheckCircle size={32} className="text-primary" />
+                            <div className="text-left">
+                               <p className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Selected Artifact</p>
+                               <p className="text-xs font-black text-text-pri dark:text-white uppercase tracking-tight">{selectedMedia.name}</p>
+                            </div>
+                         </div>
+                      </div>
+                    </motion.div>
+                  ) : (
+                    <>
+                      <div className="p-6 bg-surface dark:bg-slate-950 rounded-[2rem] text-slate-200 dark:text-slate-800 shadow-inner group-hover/asset:scale-110 group-hover/asset:text-primary transition-all duration-500">
+                        <ImageIcon size={40} />
+                      </div>
+                      <p className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-300 dark:text-slate-700 text-center">Open Visual<br/>Registry</p>
+                    </>
+                  )}
+                </div>
+              </div>
 
-                {imagePreview ? (
-                  <div className="relative rounded-lg overflow-hidden border border-gray-300">
-                    <img
-                      src={imagePreview}
-                      alt="Brand preview"
-                      className="w-full h-32 object-cover"
-                    />
-                    <button
-                      type="button"
-                      onClick={clearImage}
-                      className="absolute top-2 right-2 bg-red-500 text-white p-1.5 rounded-full hover:bg-red-600"
-                    >
-                      <X size={14} />
-                    </button>
+              <button 
+                type="submit" 
+                disabled={!name || !selectedMedia}
+                className="w-full bg-primary hover:bg-black dark:hover:bg-primary-dark text-white py-8 rounded-[2rem] text-[10px] font-black uppercase tracking-[0.4em] transition-all shadow-2xl shadow-primary/20 active:scale-95 disabled:opacity-30 flex items-center justify-center gap-4"
+              >
+                <Zap size={20} /> Commit to Nexus
+              </button>
+            </form>
+          </section>
+        </div>
+
+        {/* RIGHT: DATA DISPLAY */}
+        <div className="xl:col-span-8 space-y-12 h-screen pb-40 scrollbar-hide">
+          <section className="bg-surface dark:bg-slate-900 rounded-[4rem] border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden flex flex-col group h-full">
+            <div className="p-12 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center bg-background-site/20 dark:bg-slate-950/20">
+              <div className="space-y-1">
+                 <h3 className="text-2xl font-black text-text-pri dark:text-white uppercase tracking-tighter">Active Registries</h3>
+                 <p className="text-[10px] font-black text-slate-400 dark:text-slate-600 uppercase tracking-[0.4em]">Identity Node Protocol</p>
+              </div>
+              <div className="flex bg-background-site dark:bg-slate-950 p-3 rounded-3xl border border-slate-100 dark:border-slate-800">
+                 <div className="px-6 py-3 bg-primary text-white text-[10px] font-black rounded-2xl uppercase tracking-widest shadow-lg shadow-primary/20">
+                    {brands.length} Total Nodes
+                 </div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 p-12 overflow-y-auto">
+              {loading ? (
+                Array(6).fill(0).map((_, i) => (
+                  <div key={i} className="bg-background-site dark:bg-slate-950 aspect-[4/5] rounded-[3rem] border border-slate-100 dark:border-slate-800 animate-pulse" />
+                ))
+              ) : brands.length === 0 ? (
+                <div className="col-span-full py-40 text-center opacity-10 flex flex-col items-center">
+                  <Building2 size={120} className="mb-8" />
+                  <p className="text-4xl font-black uppercase tracking-[0.5em]">Nexus Empty</p>
+                </div>
+              ) : (
+                brands.map((brand) => (
+                  <motion.div 
+                    layout
+                    key={brand.id} 
+                    className="group-card bg-surface dark:bg-slate-900 aspect-[4/5] rounded-[3rem] border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-2xl transition-all duration-700 relative overflow-hidden flex flex-col"
+                  >
+                    <div className="flex-1 p-8 pb-0">
+                      <div className="w-full h-full rounded-[2rem] bg-background-site dark:bg-slate-950/50 p-6 flex items-center justify-center relative overflow-hidden border border-slate-100 dark:border-slate-800">
+                        <img 
+                          src={brand.image_url.startsWith('http') ? brand.image_url : `${baseUrl}/${brand.image_url.replace(/^\/+/, '')}`} 
+                          alt={brand.name} 
+                          className="max-w-full max-h-full object-contain grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-125 transition-all duration-1000" 
+                        />
+                      </div>
+                    </div>
+                    <div className="h-28 p-8 flex justify-between items-center bg-background-site/10 dark:bg-slate-950/20 backdrop-blur-sm border-t border-slate-50 dark:border-slate-800/50">
+                      <div className="space-y-1">
+                        <p className="text-[9px] font-black text-slate-400 dark:text-slate-600 uppercase tracking-widest">Identity Node</p>
+                        <h4 className="text-lg font-black text-text-pri dark:text-white uppercase tracking-tight">{brand.name}</h4>
+                      </div>
+                      <button 
+                        onClick={() => handleDelete(brand.id)}
+                        className="p-5 text-slate-300 hover:text-white hover:bg-rose-600 rounded-2xl transition-all hover:shadow-xl active:scale-90"
+                      >
+                        <Trash2 size={24}/>
+                      </button>
+                    </div>
+                    <div className="absolute top-6 right-6 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl p-3 rounded-2xl shadow-xl">
+                            <MoreVertical size={18} className="text-slate-900 dark:text-white" />
+                        </div>
+                    </div>
+                  </motion.div>
+                ))
+              )}
+            </div>
+            
+            <footer className="p-12 bg-background-site/50 dark:bg-slate-950/50 border-t border-slate-100 dark:border-slate-800/50 flex justify-between items-center">
+                <p className="text-[9px] font-black text-slate-300 dark:text-slate-800 uppercase tracking-[0.4em]">Integrated Identity Protocol v8.0.0</p>
+                <div className="flex items-center gap-4 text-emerald-500 text-[10px] font-black uppercase tracking-widest">
+                   <Zap size={14} fill="currentColor" /> Live Node Sync Active
+                </div>
+            </footer>
+          </section>
+        </div>
+      </main>
+
+      {/* Media Vault Modal */}
+      <AnimatePresence>
+        {showMediaModal && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-slate-950/90 backdrop-blur-2xl transition-all duration-500 overflow-hidden">
+            <motion.div 
+              initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }}
+              className="relative bg-surface dark:bg-slate-900 rounded-[5rem] shadow-2xl w-full max-w-7xl max-h-[90vh] flex flex-col overflow-hidden border border-slate-200 dark:border-slate-800"
+              onClick={e => e.stopPropagation()}
+            >
+              <div className="p-16 border-b border-slate-100 dark:border-slate-800 flex justify-between items-start bg-surface dark:bg-slate-900 relative">
+                <div className="absolute top-0 left-16 w-40 h-1 bg-primary" />
+                <div className="space-y-3">
+                  <h3 className="text-4xl font-black text-text-pri dark:text-white uppercase tracking-tighter">Media Vault</h3>
+                  <p className="text-[10px] font-black text-slate-400 dark:text-slate-600 uppercase tracking-[0.5em]">Map cluster to identity node</p>
+                </div>
+                <button 
+                  onClick={() => setShowMediaModal(false)} 
+                  className="p-6 bg-background-site dark:bg-slate-950 text-slate-300 hover:text-rose-600 rounded-[2.5rem] transition-all hover:rotate-90 active:scale-90 border border-slate-100 dark:border-slate-800 shadow-sm"
+                >
+                  <X size={32}/>
+                </button>
+              </div>
+
+              <div className="px-16 py-10 bg-surface dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800">
+                <div className="relative group/search">
+                  <Search className="absolute left-10 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within/search:text-primary transition-colors" size={28} />
+                  <input 
+                    type="text" 
+                    placeholder="Scan asset directory..." 
+                    value={mediaSearch} 
+                    onChange={e => setMediaSearch(e.target.value)}
+                    className="w-full pl-24 pr-12 py-8 bg-background-site dark:bg-slate-950 border-2 border-transparent focus:border-primary/10 rounded-[3rem] text-lg font-black text-text-pri dark:text-white outline-none transition-all placeholder:text-slate-200 dark:placeholder:text-slate-800 shadow-inner" 
+                  />
+                </div>
+              </div>
+
+              <div className="flex-1 overflow-y-auto p-16 bg-surface dark:bg-slate-900 custom-scrollbar">
+                {mediaLoading ? (
+                  <div className="flex flex-col items-center justify-center h-full gap-10">
+                    <div className="relative">
+                       <RotateCw size={100} className="animate-spin text-primary opacity-10" />
+                    </div>
+                    <p className="text-[10px] font-black uppercase tracking-[0.6em] text-slate-400 animate-pulse text-center">Syncing Vault...</p>
+                  </div>
+                ) : filteredMedia.length === 0 ? (
+                  <div className="flex flex-col items-center justify-center h-full opacity-10 py-40">
+                    <ImageIcon size={160} />
+                    <p className="text-4xl font-black uppercase tracking-[0.8em]">Vault Empty</p>
                   </div>
                 ) : (
-                  <div className="grid grid-cols-2 gap-4">
-                    <button
-                      type="button"
-                      onClick={openMediaSelector}
-                      className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-purple-400 transition-colors"
-                    >
-                      <Upload size={24} className="mx-auto text-gray-500 mb-2" />
-                      <span className="text-sm text-gray-600">Select from Media</span>
-                    </button>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-10">
+                    {filteredMedia.map(item => {
+                      const url = item.thumbnail ? (item.thumbnail.startsWith('http') ? item.thumbnail : `${baseUrl}/${item.thumbnail}`) : `${baseUrl}/${item.path}${item.name}`;
+                      const selected = selectedMedia?.id === item.id;
 
-                    <label className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center cursor-pointer hover:border-purple-400 transition-colors">
-                      <Upload size={24} className="mx-auto text-gray-500 mb-2" />
-                      <span className="text-sm text-gray-600">Upload</span>
-                      <input
-                        type="file"
-                        id="brandImage"
-                        accept="image/*"
-                        hidden
-                        onChange={handleDirectUpload}
-                      />
-                    </label>
+                      return (
+                        <div 
+                          key={item.id}
+                          onClick={() => setSelectedMedia(item)}
+                          className={`relative aspect-square rounded-[3rem] overflow-hidden cursor-pointer group transition-all duration-700 hover:-translate-y-4 ${
+                            selected ? 'ring-[8px] ring-primary ring-offset-8 dark:ring-offset-slate-900 scale-95 shadow-2xl' : 'shadow-sm'
+                          }`}
+                        >
+                          <img src={url} alt={item.name} className="w-full h-full object-cover grayscale transition-all duration-1000 group-hover:grayscale-0 group-hover:scale-125" />
+                          <div className={`absolute inset-0 bg-primary/20 backdrop-blur-[2px] flex items-center justify-center transition-all duration-500 ${selected ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
+                             <div className="bg-white text-primary p-6 rounded-[2rem] shadow-2xl animate-in zoom-in-50">
+                                <CheckCircle size={40} />
+                             </div>
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
                 )}
               </div>
 
-              <div className="flex gap-3 pt-4">
-                <button 
-                  type="button"
-                  className="flex-1 bg-orange-500 text-white py-2.5 rounded-lg text-sm font-bold hover:bg-orange-600 transition-colors shadow-sm"
-                  onClick={() => {
-                    setFormData({ name: '' });
-                    setImagePreview(null);
-                    setSelectedMediaId(null);
-                  }}
-                >
-                  Reset
-                </button>
-                <button 
-                  type="submit"
-                  disabled={loading}
-                  className="flex-1 bg-[#6BCB44] text-white py-2.5 rounded-lg text-sm font-bold hover:bg-green-600 transition-colors shadow-sm"
-                >
-                  {loading ? 'Adding...' : 'Add Brand'}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-
-        {/* RIGHT SIDE: Brands Table */}
-        <div className="lg:col-span-8">
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-            <div className="p-6 border-b border-gray-50 flex flex-col md:flex-row md:items-center justify-between gap-4">
-              <h3 className="text-lg font-bold text-slate-700">Brands</h3>
-              
-              <div className="flex items-center gap-2">
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
-                  <input 
-                    type="text" 
-                    placeholder="Search" 
-                    className="pl-10 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:ring-1 focus:ring-purple-500 outline-none w-full md:w-64"
-                  />
-                </div>
-                <div className="flex bg-slate-100 rounded-lg p-1">
-                  <button onClick={fetchBrands} className="p-1.5 text-gray-600 hover:bg-white rounded-md transition-all shadow-sm">
-                    <RefreshCw size={18} />
+              <footer className="p-16 border-t border-slate-100 dark:border-slate-800 bg-surface dark:bg-slate-900 flex justify-end gap-10">
+                   <button 
+                    onClick={() => setShowMediaModal(false)}
+                    className="px-12 py-6 text-[10px] font-black text-slate-400 dark:text-slate-600 uppercase tracking-[0.4em] hover:bg-background-site dark:hover:bg-slate-950 rounded-[2rem] transition-all border-2 border-transparent hover:border-slate-100 dark:hover:border-slate-800"
+                  >
+                    Abort
                   </button>
-                  <button className="p-1.5 text-gray-600 hover:bg-white rounded-md transition-all shadow-sm flex items-center gap-1">
-                    <ListFilter size={18} />
-                    <span className="text-[10px] font-bold">▼</span>
+                  <button 
+                    onClick={() => setShowMediaModal(false)}
+                    className="px-16 py-6 bg-primary text-white rounded-[2rem] text-[10px] font-black uppercase tracking-[0.4em] transition-all shadow-2xl shadow-primary/30 hover:bg-black active:scale-95"
+                  >
+                    Load Asset
                   </button>
-                  <button className="p-1.5 text-gray-600 hover:bg-white rounded-md transition-all shadow-sm flex items-center gap-1">
-                    <Download size={18} />
-                    <span className="text-[10px] font-bold">▼</span>
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-[13px] whitespace-nowrap">
-                <thead className="bg-gray-50 text-gray-500 font-bold border-b border-gray-100">
-                  <tr>
-                    <th className="px-6 py-4 border-r last:border-r-0">
-                      ID <span className="text-[10px] ml-1">▼</span>
-                    </th>
-                    <th className="px-6 py-4 border-r last:border-r-0">
-                      NAME <span className="text-[10px] ml-1">⇅</span>
-                    </th>
-                    <th className="px-6 py-4 border-r last:border-r-0 text-center">
-                      IMAGE
-                    </th>
-                    <th className="px-6 py-4 border-r last:border-r-0">
-                      STATUS
-                    </th>
-                    <th className="px-6 py-4 text-center">
-                      ACTION
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {brands.length === 0 ? (
-                    <tr>
-                      <td colSpan="5" className="px-6 py-20 text-center text-gray-400 italic">
-                        No matching records found
-                      </td>
-                    </tr>
-                  ) : (
-                    brands.map((brand) => (
-                      <tr key={brand.id} className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
-                        <td className="px-6 py-4 text-purple-600 font-medium">#{brand.id}</td>
-                        <td className="px-6 py-4 font-semibold text-slate-700">{brand.name}</td>
-                        <td className="px-6 py-4">
-                          <div className="w-12 h-12 mx-auto bg-gray-100 rounded-lg border border-gray-200 flex items-center justify-center overflow-hidden">
-                            {brand.image ? (
-                              <img src={brand.image} alt={brand.name} className="object-cover w-full h-full" />
-                            ) : (
-                              <span className="text-[8px] text-gray-400">NO IMAGE</span>
-                            )}
-                          </div>
-                        </td>
-                        <td className="px-6 py-4">
-                          <label className="relative inline-flex items-center cursor-pointer">
-                            <input type="checkbox" className="sr-only peer" defaultChecked={brand.status} />
-                            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600"></div>
-                          </label>
-                        </td>
-                        <td className="px-6 py-4 text-center">
-                          <button className="p-2 text-gray-400 hover:text-purple-600 hover:bg-purple-50 rounded-full transition-all">
-                            <MoreVertical size={18} />
-                          </button>
-                        </td>
-                      </tr>
-                    ))
-                  )}
-                </tbody>
-              </table>
-            </div>
+              </footer>
+            </motion.div>
           </div>
-        </div>
-      </div>
-
-      {/* ====================== MEDIA SELECTION MODAL (Same as Categories/Sliders) ====================== */}
-      {showMediaModal && (
-        <div 
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
-          onClick={() => setShowMediaModal(false)}
-        >
-          <div 
-            className="bg-white rounded-2xl shadow-2xl w-full max-w-5xl max-h-[90vh] overflow-hidden flex flex-col"
-            onClick={e => e.stopPropagation()}
-          >
-            <div className="p-5 border-b border-gray-200 flex justify-between items-center bg-gray-50">
-              <h3 className="text-xl font-semibold text-gray-800">Select Image from Media Library</h3>
-              <button
-                onClick={() => setShowMediaModal(false)}
-                className="text-gray-600 hover:text-gray-900 p-2 rounded-full hover:bg-gray-200"
-              >
-                <X size={24} />
-              </button>
-            </div>
-
-            <div className="p-4 border-b border-gray-200">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
-                <input
-                  type="text"
-                  placeholder="Search media..."
-                  value={mediaSearch}
-                  onChange={(e) => setMediaSearch(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-                />
-              </div>
-            </div>
-
-            <div className="flex-1 overflow-y-auto p-5 bg-gray-50">
-              {mediaLoading ? (
-                <div className="flex flex-col items-center justify-center h-full">
-                  <RotateCcw size={32} className="animate-spin mb-3 text-purple-600" />
-                  <p className="text-gray-600">Loading media library...</p>
-                </div>
-              ) : filteredMedia.length === 0 ? (
-                <div className="flex flex-col items-center justify-center h-full text-gray-500">
-                  <ImageIcon size={64} className="mb-4 opacity-50" />
-                  <p>{mediaSearch ? 'No matching images found' : 'No images uploaded yet'}</p>
-                </div>
-              ) : (
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                  {filteredMedia.map(item => {
-                    const imageUrl = item.thumbnail || `${item.path}${item.name}`;
-                    const fullUrl = imageUrl.startsWith('http')
-                      ? imageUrl
-                      : `${baseUrl}/${imageUrl.replace(/^\/+/, '')}`;
-
-                    const isSelected = selectedMediaId === item.id;
-
-                    return (
-                      <div 
-                        key={item.id}
-                        onClick={() => selectMediaItem(item)}
-                        className={`group relative cursor-pointer rounded-lg overflow-hidden border-2 transition-all duration-200 hover:shadow-lg hover:border-purple-400 ${
-                          isSelected 
-                            ? 'border-purple-600 shadow-xl ring-2 ring-purple-500 ring-offset-2 scale-[1.02]' 
-                            : 'border-gray-200'
-                        }`}
-                      >
-                        <img
-                          src={fullUrl}
-                          alt={item.name}
-                          className="w-full aspect-square object-cover group-hover:scale-105 transition-transform duration-300"
-                          onError={(e) => {
-                            e.target.src = 'data:image/svg+xml;utf8,<svg width="150" height="150" viewBox="0 0 150 150" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="150" height="150" fill="%23f3f4f6"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-size="18" fill="%239ca3af">No Image</text></svg>';
-                          }}
-                        />
-                        {isSelected && (
-                          <div className="absolute inset-0 bg-purple-600/20 flex items-center justify-center">
-                            <CheckCircle size={64} className="text-white drop-shadow-2xl" />
-                          </div>
-                        )}
-                        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-3">
-                          <p className="text-white text-xs truncate font-medium">{item.name}</p>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-            </div>
-
-            <div className="p-4 border-t border-gray-200 flex justify-end gap-4 bg-gray-50">
-              <button
-                onClick={() => setShowMediaModal(false)}
-                className="px-6 py-2.5 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors font-medium"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={() => setShowMediaModal(false)}
-                className="px-6 py-2.5 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-medium disabled:opacity-50"
-                disabled={mediaLoading}
-              >
-                Done
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+        )}
+      </AnimatePresence>
     </div>
   );
 }

@@ -2,165 +2,151 @@ import React, { useState } from 'react';
 import { 
   ShieldCheck, FileText, Save, RotateCcw, 
   ChevronRight, Eye, History, CheckCircle2, 
-  Info, Clock, Search, Bell, UserCircle
+  Info, Clock, Search, Bell, UserCircle,
+  Gavel, Activity, Shield
 } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function AdminLegalSettings() {
   const [activeTab, setActiveTab] = useState('privacy');
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] font-sans text-slate-900">
+    <div className="min-h-screen bg-background-site dark:bg-slate-950 p-6 md:p-10 text-text-pri dark:text-white transition-colors duration-500 font-sans pb-24">
       
-      {/* --- TOP NAVBAR --- */}
-      <header className="h-20 bg-white border-b border-slate-200 px-8 flex items-center justify-between sticky top-0 z-10">
-        <div className="flex items-center gap-4">
-          <div className="p-2 bg-indigo-600 rounded-lg text-white shadow-md">
-            <ShieldCheck size={20} />
+      {/* --- HEADER CONSOLE --- */}
+      <header className="max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center mb-16 gap-8 relative z-10">
+        <div className="space-y-3">
+          <div className="flex items-center gap-3 text-[10px] font-black text-primary dark:text-primary-light uppercase tracking-[0.4em]">
+            <Gavel size={16} className="text-primary animate-bounce" />
+            <span>Governance Protocol v5.0</span>
           </div>
-          <div className="flex items-center gap-2 text-xs font-bold text-slate-400 uppercase tracking-widest">
-            Home <ChevronRight size={12} /> <span className="text-indigo-600">Legal Management</span>
-          </div>
+          <h1 className="text-5xl font-black text-text-pri dark:text-white tracking-tighter uppercase leading-none">Legal Framework</h1>
         </div>
-        
-        <div className="flex items-center gap-6">
-          <div className="relative hidden md:block">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
-            <input type="text" placeholder="Search content..." className="bg-slate-50 border border-slate-200 rounded-xl py-2 pl-10 pr-4 text-sm outline-none focus:ring-2 focus:ring-indigo-500/10 transition-all w-64" />
-          </div>
-          <div className="relative cursor-pointer hover:opacity-70">
-              <Bell size={20} className="text-slate-400" />
-              <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center border-2 border-white font-bold">0</span>
-          </div>
-          <div className="h-8 w-[1px] bg-slate-200"></div>
-          <div className="flex items-center gap-3">
-              <div className="text-right hidden sm:block">
-                  <p className="text-xs font-black text-slate-800">Administrator</p>
-                  <p className="text-[10px] font-bold text-slate-400 uppercase">Super Admin</p>
-              </div>
-              <UserCircle size={36} className="text-indigo-600" />
-          </div>
+
+        {/* Premium Tab Switcher */}
+        <div className="flex bg-surface dark:bg-slate-900 p-2 rounded-[3rem] border border-slate-200 dark:border-slate-800 shadow-sm transition-all">
+          <button 
+            onClick={() => setActiveTab('privacy')}
+            className={`flex items-center gap-4 px-10 py-5 rounded-[2.5rem] text-[10px] font-black uppercase tracking-[0.3em] transition-all relative overflow-hidden group/tab ${
+              activeTab === 'privacy' 
+              ? 'bg-primary text-white shadow-2xl shadow-primary/30' 
+              : 'text-slate-400 dark:text-slate-600 hover:text-primary'
+            }`}
+          >
+            <ShieldCheck size={18} className="relative z-10" />
+            <span className="relative z-10">Privacy Protocol</span>
+            {activeTab === 'privacy' && (
+              <motion.div layoutId="active-bg" className="absolute inset-0 bg-primary z-0" />
+            )}
+          </button>
+          <button 
+            onClick={() => setActiveTab('terms')}
+            className={`flex items-center gap-4 px-10 py-5 rounded-[2.5rem] text-[10px] font-black uppercase tracking-[0.3em] transition-all relative overflow-hidden group/tab ${
+              activeTab === 'terms' 
+              ? 'bg-primary text-white shadow-2xl shadow-primary/30' 
+              : 'text-slate-400 dark:text-slate-600 hover:text-primary'
+            }`}
+          >
+            <FileText size={18} className="relative z-10" />
+            <span className="relative z-10">Service Terms</span>
+            {activeTab === 'terms' && (
+              <motion.div layoutId="active-bg" className="absolute inset-0 bg-primary z-0" />
+            )}
+          </button>
         </div>
       </header>
 
-      {/* --- MAIN CONTENT --- */}
-      <main className="p-8 md:p-12 lg:p-16">
-        <div className="max-w-5xl mx-auto">
+      <main className="max-w-5xl mx-auto">
+        {/* Editor Card */}
+        <motion.div 
+          key={activeTab}
+          initial={{ opacity: 0, scale: 0.98, y: 30 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          className="bg-surface dark:bg-slate-900 rounded-[4rem] border border-slate-200 dark:border-slate-800 shadow-sm transition-all duration-700 overflow-hidden relative group"
+        >
+          <div className="absolute top-0 right-0 -mr-20 -mt-20 w-40 h-40 bg-primary/5 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
           
-          {/* Header Section */}
-          <div className="flex flex-col md:flex-row items-center justify-between gap-8 mb-12">
-            <div>
-              <h1 className="text-4xl font-black text-slate-900 tracking-tight mb-2">
-               Admin Privacy Policy And Terms & Conditions
-              </h1>
-              <p className="text-slate-500 font-medium italic">Manage and update the legal framework of citycommerce.com</p>
+          {/* Toolbar Matrix */}
+          <div className="px-12 py-8 bg-background-site/50 dark:bg-slate-950/50 border-b border-primary/5 flex flex-wrap items-center justify-between gap-8 relative z-10">
+            <div className="flex items-center gap-8">
+              <div className="flex bg-surface dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-[1.5rem] p-1.5 shadow-inner">
+                {['B', 'I', 'U'].map((label, i) => (
+                  <button key={i} className={`px-8 py-3 hover:bg-background-site dark:hover:bg-slate-950 rounded-xl text-text-pri dark:text-white font-black text-sm transition-all hover:scale-110 active:scale-90 ${i === 1 ? 'italic font-serif' : i === 2 ? 'underline' : ''}`}>
+                    {label}
+                  </button>
+                ))}
+              </div>
+              <div className="w-px h-12 bg-primary/10" />
+              <div className="flex items-center gap-4 text-[10px] font-black text-slate-400 dark:text-slate-600 uppercase tracking-[0.3em]">
+                <Clock size={16} className="text-primary" /> Adjusted: 2MIN_DELTA
+              </div>
             </div>
 
-            {/* Centered Tab Switcher */}
-            <div className="flex bg-white p-1.5 rounded-[1.5rem] shadow-xl shadow-slate-200/50 border border-slate-200">
-              <button 
-                onClick={() => setActiveTab('privacy')}
-                className={`flex items-center gap-2 px-8 py-3 rounded-[1.2rem] text-sm font-bold transition-all ${
-                  activeTab === 'privacy' 
-                  ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-200' 
-                  : 'text-slate-400 hover:text-slate-900'
-                }`}
-              >
-                <ShieldCheck size={18} />
-                Privacy Policy
-              </button>
-              <button 
-                onClick={() => setActiveTab('terms')}
-                className={`flex items-center gap-2 px-8 py-3 rounded-[1.2rem] text-sm font-bold transition-all ${
-                  activeTab === 'terms' 
-                  ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-200' 
-                  : 'text-slate-400 hover:text-slate-900'
-                }`}
-              >
-                <FileText size={18} />
-                Terms & Conditions
-              </button>
+            <div className="flex items-center gap-4">
+              {[History, Eye].map((Icon, i) => (
+                <button key={i} className="p-5 bg-surface dark:bg-slate-900 text-slate-300 dark:text-slate-700 rounded-2xl border border-slate-100 dark:border-slate-800 hover:text-primary hover:border-primary/20 hover:bg-primary/5 transition-all shadow-sm active:scale-90">
+                  <Icon size={24} />
+                </button>
+              ))}
             </div>
           </div>
 
-          {/* Editor Card */}
-          <div className="bg-white rounded-[3rem] shadow-2xl shadow-slate-200/40 border border-slate-200 overflow-hidden">
+          {/* Writing Nexus */}
+          <div className="p-16 md:p-24 lg:p-32 relative z-10">
+            <div className="flex items-center gap-4 mb-12">
+              <div className="w-3 h-3 rounded-full bg-emerald-500 animate-ping shadow-lg shadow-emerald-500/50" />
+              <div className="h-3 w-3 bg-emerald-500 rounded-full absolute" />
+              <span className="text-[10px] font-black text-primary uppercase tracking-[0.4em]">Editor Protocol: ACTIVE_SESSION</span>
+            </div>
             
-            {/* Toolbar */}
-            <div className="px-10 py-6 bg-slate-50/50 border-b border-slate-100 flex flex-wrap items-center justify-between gap-4">
-              <div className="flex items-center gap-4">
-                <div className="flex bg-white border border-slate-200 rounded-xl p-1 shadow-sm">
-                  <button className="px-5 py-2 hover:bg-slate-50 rounded-lg text-slate-700 font-bold text-sm">B</button>
-                  <button className="px-5 py-2 hover:bg-slate-50 rounded-lg text-slate-700 italic font-serif text-sm">I</button>
-                  <button className="px-5 py-2 hover:bg-slate-50 rounded-lg text-slate-700 underline text-sm">U</button>
-                </div>
-                <div className="h-8 w-[1px] bg-slate-200 mx-2"></div>
-                <div className="flex items-center gap-2 text-xs font-bold text-slate-400">
-                  <Clock size={14} /> Last edited 2 mins ago
-                </div>
-              </div>
+            <textarea
+              className="w-full min-h-[700px] bg-transparent border-none outline-none text-text-pri dark:text-slate-200 leading-[2] font-serif text-2xl md:text-3xl resize-none placeholder:text-slate-100 dark:placeholder:text-slate-800 transition-all font-light"
+              placeholder={`Initialize ${activeTab === 'privacy' ? 'Privacy Framework' : 'Terms of Service'} matrix...`}
+              defaultValue={activeTab === 'privacy' 
+                ? "Costumers ACCESSING, BROWSING OR OTHERWISE USING THE WEBSITE citycommerce.com indicates user is in AGREEMENT with citycommerce vegetables & fruits Pvt Ltd. The privacy of our administrators and users is paramount. This protocol outlines the data processing cycles..." 
+                : "Gmartfresh reserves the right to add, alter, change, modify or delete any of these terms and conditions at any time without prior information. System access is restricted to authorized administrative nodes only..."}
+            />
+          </div>
 
-              <div className="flex items-center gap-3">
-                 <button className="p-2.5 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl transition-all" title="View History">
-                  <History size={20} />
-                </button>
-                <button className="p-2.5 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl transition-all" title="Preview Live">
-                  <Eye size={20} />
-                </button>
+          {/* Action Console */}
+          <div className="px-12 py-12 bg-background-site/50 dark:bg-slate-950/80 border-t border-primary/10 flex flex-col lg:flex-row items-center justify-between gap-12 relative z-10">
+            <div className="flex items-center gap-8 p-8 bg-surface dark:bg-slate-900 border border-primary/10 rounded-[3rem] shadow-inner max-w-xl group/alert hover:border-primary/30 transition-all duration-500">
+              <div className="w-16 h-16 bg-primary/5 text-primary rounded-2xl flex items-center justify-center shrink-0 shadow-inner group-hover:scale-110 transition-transform">
+                <Shield size={32} />
               </div>
-            </div>
-
-            {/* Writing Area */}
-            <div className="p-12 md:p-16">
-              <div className="flex items-center gap-2 mb-6">
-                <div className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></div>
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">Live Editor Mode</span>
-              </div>
-              
-              <textarea
-                className="w-full min-h-[600px] bg-transparent border-none outline-none text-slate-700 leading-[1.8] font-serif text-xl resize-none placeholder:text-slate-200"
-                placeholder={`Start typing the ${activeTab === 'privacy' ? 'Privacy Policy' : 'Terms & Conditions'}...`}
-                defaultValue={activeTab === 'privacy' 
-                  ? "Costumers ACCESSING, BROWSING OR OTHERWISE USING THE WEBSITE citycommerce.com indicates user is in AGREEMENT with citycommerce vegetables & fruits Pvt Ltd..." 
-                  : "Gmartfresh reserves the right to add, alter, change, modify or delete any of these terms and conditions at any time without prior information..."}
-              />
-            </div>
-
-            {/* Action Footer */}
-            <div className="px-12 py-10 bg-slate-50/80 border-t border-slate-100 flex flex-col lg:flex-row items-center justify-between gap-8">
-              <div className="flex items-center gap-4 p-5 bg-white border border-indigo-100 rounded-[2rem] shadow-sm max-w-md">
-                <div className="p-3 bg-indigo-50 rounded-2xl text-indigo-600">
-                  <Info size={24} />
-                </div>
-                <p className="text-xs font-medium text-slate-500 leading-relaxed">
-                  <span className="font-bold text-slate-800">Compliance Check:</span> Ensure your {activeTab === 'privacy' ? 'Privacy Policy' : 'Terms'} match current data protection laws (GDPR/DPDP).
+              <div className="space-y-2">
+                <span className="text-[10px] font-black text-text-pri dark:text-white uppercase tracking-[0.3em]">Compliance Directive</span>
+                <p className="text-[10px] font-black text-slate-400 dark:text-slate-600 leading-relaxed uppercase tracking-tight italic">
+                  Verify {activeTab} alignment with global technical standards before repository commit.
                 </p>
               </div>
+            </div>
 
-              <div className="flex items-center gap-4 w-full lg:w-auto">
-                <button className="flex-1 lg:flex-none flex items-center justify-center gap-2 px-10 py-5 bg-white border-2 border-slate-200 text-slate-600 rounded-[1.5rem] font-bold hover:bg-slate-100 transition-all active:scale-95">
-                  <RotateCcw size={20} />
-                  Reset Draft
-                </button>
-                <button className="flex-1 lg:flex-none flex items-center justify-center gap-2 px-14 py-5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-[1.5rem] font-bold shadow-2xl shadow-indigo-200 transition-all active:scale-[0.98]">
-                  <Save size={20} />
-                  Update {activeTab === 'privacy' ? 'Privacy Policy' : 'Terms'}
-                </button>
-              </div>
+            <div className="flex items-center gap-6 w-full lg:w-auto">
+              <button className="flex-1 lg:flex-none flex items-center justify-center gap-5 px-12 py-6 bg-background-site dark:bg-slate-800 text-slate-400 dark:text-slate-600 hover:text-red-500 rounded-[2.5rem] font-black text-[11px] uppercase tracking-[0.4em] border border-slate-100 dark:border-slate-700/50 hover:border-red-500/20 transition-all active:scale-95 shadow-sm">
+                <RotateCcw size={24} />
+                ABORT_DRAFT
+              </button>
+              <button className="group/btn flex-1 lg:flex-none flex items-center justify-center gap-6 px-16 py-6 bg-primary text-white rounded-[2.5rem] font-black text-[11px] uppercase tracking-[0.6em] shadow-3xl shadow-primary/40 hover:bg-black hover:-translate-y-2 transition-all active:scale-[0.98] relative overflow-hidden">
+                <div className="absolute inset-0 bg-white/10 -translate-x-full group-hover/btn:translate-x-0 transition-transform duration-700" />
+                <Save size={24} className="relative z-10" />
+                <span className="relative z-10">COMMIT_PROTOCOL</span>
+              </button>
             </div>
           </div>
+        </motion.div>
 
-          {/* Copyright Note */}
-          <div className="mt-16 text-center">
-             <div className="flex justify-center gap-4 mb-4 opacity-30 grayscale">
-                <div className="h-6 w-12 bg-slate-400 rounded-sm"></div>
-                <div className="h-6 w-12 bg-slate-400 rounded-sm"></div>
-                <div className="h-6 w-12 bg-slate-400 rounded-sm"></div>
-             </div>
-             <p className="text-[10px] font-bold text-slate-300 uppercase tracking-[0.4em]">
-                Copyright © 2026 - 2027 Jijai Masale. All Right Reserved
-             </p>
-          </div>
-        </div>
+        {/* --- FOOTER TELEMETRY --- */}
+        <footer className="mt-24 text-center space-y-12 relative z-10">
+           <div className="flex justify-center items-center gap-10 opacity-20 grayscale hover:grayscale-0 transition-all duration-1000">
+              <Activity size={28} className="text-primary animate-pulse" />
+              <div className="h-px w-32 bg-gradient-to-r from-transparent via-primary to-transparent" />
+              <ShieldCheck size={28} className="text-primary" />
+           </div>
+           <p className="text-[10px] font-black text-slate-400 dark:text-slate-700 uppercase tracking-[0.8em]">
+              Governance Lifecycle Node: <span className="text-primary italic">ID-SYS-LEGAL-SIGMA</span>
+           </p>
+        </footer>
       </main>
     </div>
   );

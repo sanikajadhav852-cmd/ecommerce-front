@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Search, ChevronDown, UserPlus, Trash2, CreditCard } from 'lucide-react';
+import { Search, ChevronDown, UserPlus, Trash2, CreditCard, ChevronRight, Zap, ShoppingCart, User, Package } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function PointOfSale() {
   const [products] = useState([
@@ -12,144 +13,189 @@ export default function PointOfSale() {
   ]);
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-500 pb-10">
-      {/* Header */}
-      <div className="flex justify-between items-center">
-        <h2 className="text-xl font-bold text-[#4e5e7a]">Point Of Sale</h2>
-        <p className="text-sm text-gray-500">
-          Home / <span className="text-purple-600">Point Of Sale</span>
-        </p>
-      </div>
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 p-6 md:p-10 text-slate-900 dark:text-white transition-colors duration-500 font-sans pb-24">
+      
+      {/* --- HEADER CONSOLE --- */}
+      <header className="max-w-[1600px] mx-auto flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-6">
+        <div className="space-y-1">
+          <div className="flex items-center gap-2 text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-[0.2em]">
+            <Zap size={14} className="animate-pulse" />
+            <span>Transactional Node</span>
+          </div>
+          <h1 className="text-4xl font-black text-slate-900 dark:text-white tracking-tight">Point Of Sale</h1>
+        </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* LEFT: Product Selection */}
-        <div className="lg:col-span-8 space-y-6">
-          {/* Top Search & Filter */}
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-wrap gap-4">
-            <div className="flex-1 min-w-[250px] space-y-2">
-              <label className="block text-sm text-[#4e5e7a]">Filter Product By Category</label>
-              <div className="relative">
-                <select className="w-full border border-gray-200 rounded-lg p-2.5 text-sm outline-none appearance-none bg-white">
-                  <option>Select Categories</option>
+        <div className="flex items-center gap-2 text-[10px] font-black text-slate-400 dark:text-slate-500 bg-white dark:bg-slate-900 px-6 py-3 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+          <span>Home</span> <ChevronRight size={14} className="text-slate-300" /> <span className="text-indigo-600 dark:text-indigo-400">Terminal 01</span>
+        </div>
+      </header>
+
+      <div className="max-w-[1600px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10">
+        
+        {/* LEFT: Product Discovery Matrix */}
+        <div className="lg:col-span-8 space-y-10">
+          
+          {/* Filter & Search Ribbon */}
+          <div className="bg-white dark:bg-slate-900 p-8 rounded-[3rem] shadow-sm border border-slate-200 dark:border-slate-800 flex flex-wrap gap-8">
+            <div className="flex-1 min-w-[280px] space-y-3">
+              <label className="text-[10px] font-black text-slate-400 dark:text-slate-600 uppercase tracking-widest ml-2">Category Filter</label>
+              <div className="relative group">
+                <select className="w-full bg-slate-50 dark:bg-slate-950 border-2 border-transparent focus:border-indigo-500/10 rounded-2xl p-5 text-sm font-black text-slate-900 dark:text-white outline-none appearance-none transition-all shadow-inner">
+                  <option>All Primary Categories</option>
+                  <option>Masale</option>
+                  <option>Powders</option>
                 </select>
-                <ChevronDown size={14} className="absolute right-3 top-3.5 text-gray-400" />
+                <ChevronDown size={18} className="absolute right-6 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none group-focus-within:text-indigo-500 transition-colors" />
               </div>
             </div>
-            <div className="flex-1 min-w-[250px] space-y-2">
-              <label className="block text-sm text-[#4e5e7a]">Search Your Product</label>
-              <input type="text" placeholder="Search Products" className="w-full border border-gray-200 rounded-lg p-2.5 text-sm outline-none focus:ring-1 focus:ring-purple-500" />
+            <div className="flex-1 min-w-[280px] space-y-3">
+              <label className="text-[10px] font-black text-slate-400 dark:text-slate-600 uppercase tracking-widest ml-2">Identify Asset</label>
+              <div className="relative group">
+                <Search size={18} className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-500 transition-colors" />
+                <input 
+                  type="text" 
+                  placeholder="Query SKU, Name or ID..." 
+                  className="w-full bg-slate-50 dark:bg-slate-950 border-2 border-transparent focus:border-indigo-500/10 rounded-2xl p-5 pl-16 text-sm font-black text-slate-900 dark:text-white outline-none transition-all placeholder:text-slate-400 shadow-inner" 
+                />
+              </div>
             </div>
           </div>
 
-          {/* Product Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+          {/* Product Grid Manifest */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8">
             {products.map((product) => (
-              <div key={product.id} className="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex flex-col items-center">
-                <h4 className="text-[10px] font-bold text-[#4e5e7a] mb-4 text-center">{product.name}</h4>
-                <div className="relative w-32 h-40 mb-4">
-                  <img src={product.image} alt={product.name} className="w-full h-full object-contain" />
-                </div>
-                {/* Visual Label (e.g., Marathi text area) */}
-                <div className={`${product.color} w-full py-1 mb-4 rounded text-center text-white text-[10px]`}>
-                   Labels
+              <motion.div 
+                key={product.id} 
+                whileHover={{ y: -10 }}
+                className="group bg-white dark:bg-slate-900 p-8 rounded-[3rem] shadow-sm border border-slate-100 dark:border-slate-800 flex flex-col items-center hover:shadow-2xl hover:border-indigo-500/20 transition-all duration-500 relative"
+              >
+                <div className="w-full flex justify-between items-center mb-10">
+                    <span className="text-[9px] font-black text-slate-300 dark:text-slate-700 uppercase tracking-[0.2em] group-hover:text-indigo-500 transition-colors">HEX-0{product.id}</span>
+                    <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-lg shadow-emerald-500/30" />
                 </div>
                 
-                <div className="w-full space-y-3">
+                <div className="relative w-40 h-40 mb-10 flex items-center justify-center">
+                  <div className="absolute inset-0 bg-slate-50 dark:bg-slate-950 rounded-full scale-0 group-hover:scale-100 transition-transform duration-700 opacity-50" />
+                  <img src={product.image} alt={product.name} className="relative z-10 w-full h-full object-contain drop-shadow-2xl grayscale group-hover:grayscale-0 transition-all duration-700" />
+                </div>
+
+                <div className="text-center w-full mb-10 space-y-2">
+                    <h4 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-tight line-clamp-1">{product.name}</h4>
+                    <p className="text-[9px] text-slate-400 dark:text-slate-600 font-bold uppercase tracking-widest leading-none">Premium Fulfillment Asset</p>
+                </div>
+                
+                <div className="w-full space-y-5">
                   {product.variants ? (
                     <div className="relative">
-                      <select className="w-full border border-gray-200 rounded-lg p-1.5 text-xs outline-none appearance-none bg-white text-center">
+                      <select className="w-full bg-slate-50 dark:bg-slate-950 border-2 border-transparent focus:border-indigo-500 group-hover:bg-white dark:group-hover:bg-slate-900 rounded-[1.5rem] p-4 text-[10px] font-black uppercase text-slate-600 dark:text-slate-400 outline-none appearance-none text-center transition-all shadow-inner">
                         {product.variants.map(v => <option key={v}>{v}</option>)}
                       </select>
-                      <ChevronDown size={12} className="absolute right-2 top-2.5 text-gray-400" />
+                      <ChevronDown size={14} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-300 pointer-events-none" />
                     </div>
                   ) : (
-                    <div className="text-center text-xs font-bold text-[#4e5e7a] border border-gray-100 py-1.5 rounded-lg bg-gray-50">
+                    <div className="text-center text-xs font-black text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/50 py-4 rounded-[1.5rem] border border-indigo-100 dark:border-indigo-900/10">
                       {product.price}
                     </div>
                   )}
-                  <button className="w-full bg-[#00bcd4] text-white py-2 rounded-lg text-[10px] font-bold shadow-sm hover:bg-[#00acc1] transition-colors">
-                    Add to Cart
+                  <button className="w-full bg-indigo-600 text-white py-5 rounded-[1.5rem] text-[10px] font-black uppercase tracking-[0.2em] shadow-xl shadow-indigo-600/20 hover:scale-[1.02] active:scale-95 transition-all">
+                    Inject to Session
                   </button>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
 
-        {/* RIGHT: Cart & Checkout */}
-        <div className="lg:col-span-4">
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 sticky top-6">
-            {/* User Section */}
-            <div className="space-y-4 mb-8">
-              <div className="flex justify-between items-center">
-                <span className="text-xs text-gray-500">Already Registered?</span>
-                <button className="bg-[#8592a3] text-white text-[10px] px-3 py-1 rounded">Clear</button>
-              </div>
-              <div className="relative">
-                <select className="w-full border border-gray-200 rounded-lg p-2.5 text-sm outline-none appearance-none bg-white">
-                  <option>Search for user</option>
-                </select>
-                <ChevronDown size={14} className="absolute right-3 top-3.5 text-gray-400" />
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-xs text-gray-500">Don't Have An Account? Register Here</span>
-                <button className="bg-[#71dd37] text-white p-2 rounded-lg shadow-sm hover:opacity-90">
-                  <UserPlus size={16} />
-                </button>
-              </div>
-            </div>
-
-            {/* Cart Section */}
-            <div className="border-t pt-6 mb-8">
-              <h3 className="text-center text-[#6f42c1] font-bold text-lg mb-4">Cart</h3>
-              <div className="flex justify-between text-[10px] font-bold text-gray-400 uppercase mb-4 px-2">
-                <span>Item</span>
-                <span>Price</span>
-                <span>Quantity</span>
-                <Trash2 size={14} />
-              </div>
-              <div className="py-12 text-center text-sm text-[#6f42c1] font-medium italic">
-                No items in cart
-              </div>
-              <div className="border-t pt-4 flex justify-between items-center">
-                <span className="text-xs font-bold text-[#4e5e7a]">Subtotal</span>
-                <span className="text-xs font-bold text-[#4e5e7a]">₹0</span>
-              </div>
-            </div>
-
-            {/* Delivery & Payment */}
+        {/* RIGHT: Cart Intelligence & Settlement Sidebar */}
+        <div className="lg:col-span-4 space-y-10">
+          <section className="bg-white dark:bg-slate-900 p-10 rounded-[4rem] shadow-2xl border border-slate-100 dark:border-slate-800 sticky top-10 flex flex-col space-y-10">
+            
+            {/* Active Client Identification */}
             <div className="space-y-6">
-              <div className="space-y-2">
-                <p className="text-xs font-bold text-[#6f42c1]">Delivery type</p>
-                <div className="space-y-1">
-                  <RadioOption label="Local Pickup" name="delivery" checked />
-                  <RadioOption label="Door Step Delivery" name="delivery" />
+              <div className="flex justify-between items-center px-2">
+                <div className="flex items-center gap-2 text-[10px] font-black text-slate-400 dark:text-slate-600 uppercase tracking-widest">
+                   <User size={14} /> Active Entity
                 </div>
+                <button className="text-rose-500 text-[10px] font-black uppercase tracking-widest hover:text-rose-600 transition-colors">Reset Node</button>
               </div>
-
-              <div className="space-y-2">
-                <p className="text-xs font-bold text-[#6f42c1]">Payment Methods</p>
-                <div className="grid grid-cols-1 gap-1">
-                  <RadioOption label="Cash" name="payment" />
-                  <RadioOption label="Card Payment" name="payment" />
-                  <RadioOption label="Bar Code / QR Code Scan" name="payment" />
-                  <RadioOption label="Net Banking" name="payment" />
-                  <RadioOption label="Online Payment" name="payment" />
-                  <RadioOption label="Other" name="payment" />
-                </div>
+              <div className="relative group">
+                <select className="w-full bg-slate-50 dark:bg-slate-950 border-2 border-transparent focus:border-indigo-500/10 rounded-2xl p-5 text-[0.9375rem] font-black text-slate-900 dark:text-white outline-none appearance-none transition-all shadow-inner">
+                  <option>Guest Account / Anonymous</option>
+                  <option>Registered Client - Master Entry</option>
+                </select>
+                <ChevronDown size={20} className="absolute right-6 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-500 transition-colors pointer-events-none" />
               </div>
-
-              {/* Action Buttons */}
-              <div className="flex gap-2 pt-4">
-                <button className="flex-1 bg-[#ff4d49] text-white py-2 rounded text-[10px] font-bold shadow-md">
-                  Clear Cart
-                </button>
-                <button className="flex-1 bg-[#6f42c1] text-white py-2 rounded text-[10px] font-bold shadow-md">
-                  Place Order
+              <div className="flex justify-between items-center gap-4 bg-indigo-600/5 dark:bg-indigo-400/5 p-6 rounded-3xl border border-indigo-500/10 transition-colors group">
+                <span className="text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-tight leading-relaxed">System requires new entity registration?</span>
+                <button className="bg-indigo-600 text-white p-4 rounded-2xl shadow-xl shadow-indigo-600/20 hover:scale-110 active:scale-90 transition-all">
+                  <UserPlus size={20} />
                 </button>
               </div>
             </div>
-          </div>
+
+            {/* Current Session Matrix (Cart) */}
+            <div className="flex-1 space-y-8 flex flex-col">
+              <div className="flex items-center justify-between px-2">
+                <h3 className="text-xl font-black text-slate-900 dark:text-white tracking-tight flex items-center gap-3">
+                   <ShoppingCart size={24} className="text-indigo-600" />
+                   Session Cart
+                </h3>
+                <span className="bg-slate-900 dark:bg-indigo-600 text-white text-[9px] font-black px-4 py-2 rounded-full uppercase tracking-tighter shadow-lg">0 Units</span>
+              </div>
+              
+              <div className="flex-1 min-h-[250px] flex flex-col items-center justify-center p-12 bg-slate-50 dark:bg-slate-950/50 rounded-[3rem] border border-dashed border-slate-200 dark:border-slate-800 transition-colors group">
+                <div className="w-24 h-24 bg-white dark:bg-slate-900 rounded-full mb-8 flex items-center justify-center text-slate-200 dark:text-slate-800 group-hover:scale-110 transition-transform duration-500 shadow-inner">
+                    <Package size={40} />
+                </div>
+                <p className="text-[10px] text-slate-400 dark:text-slate-700 font-black uppercase tracking-[0.3em]">Matrix Buffer Empty</p>
+              </div>
+
+              <div className="space-y-4 px-2">
+                <div className="flex justify-between items-center">
+                    <span className="text-[10px] font-black text-slate-400 dark:text-slate-600 uppercase tracking-widest">Base Valuation</span>
+                    <span className="text-sm font-black text-slate-900 dark:text-white tracking-tight">₹0.00</span>
+                </div>
+                <div className="h-px bg-slate-100 dark:bg-slate-800 w-full" />
+                <div className="flex justify-between items-center pt-2">
+                    <span className="text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-[0.2em]">Net Final Settlement</span>
+                    <span className="text-3xl font-black text-indigo-600 dark:text-indigo-400 tracking-tighter">₹0.00</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Settlement Protocols */}
+            <div className="space-y-10">
+              <div className="space-y-6 bg-slate-50 dark:bg-slate-950/50 p-8 rounded-[2.5rem] border border-slate-100 dark:border-slate-800 transition-colors">
+                <div className="space-y-4">
+                  <p className="text-[9px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-[0.3em] mb-4">Distribution Vector</p>
+                  <div className="grid grid-cols-1 gap-4">
+                    <RadioOption label="Instant Point Pickup" name="delivery" checked />
+                    <RadioOption label="Geospatial Delivery" name="delivery" />
+                  </div>
+                </div>
+
+                <div className="space-y-4 pt-6 border-t border-slate-100 dark:border-slate-800">
+                  <p className="text-[9px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-[0.3em] mb-4">Settlement Logic</p>
+                  <div className="grid grid-cols-1 gap-4">
+                    <RadioOption label="Physical Tender (Cash)" name="payment" checked />
+                    <RadioOption label="Digital Node (UPI)" name="payment" />
+                    <RadioOption label="Terminal Swipe (POS Card)" name="payment" />
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex flex-col gap-5">
+                <button className="w-full bg-white dark:bg-slate-900 text-slate-400 dark:text-slate-600 border border-slate-200 dark:border-slate-800 py-6 rounded-[1.5rem] text-[10px] font-black uppercase tracking-widest hover:text-rose-500 transition-all active:scale-95 shadow-sm">
+                  Purge Session Buffer
+                </button>
+                <button className="w-full bg-indigo-600 text-white py-8 rounded-[2rem] text-xs font-black uppercase tracking-[0.3em] shadow-2xl shadow-indigo-600/30 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-4 group">
+                  <CreditCard size={22} className="group-hover:rotate-12 transition-transform" /> 
+                  Execute Settlement
+                </button>
+              </div>
+            </div>
+
+          </section>
         </div>
       </div>
     </div>
@@ -158,9 +204,13 @@ export default function PointOfSale() {
 
 function RadioOption({ label, name, checked }) {
   return (
-    <label className="flex items-center gap-2 cursor-pointer group">
-      <input type="radio" name={name} defaultChecked={checked} className="w-3 h-3 text-purple-600 focus:ring-purple-500 border-gray-300" />
-      <span className="text-[10px] text-gray-600 group-hover:text-purple-600 transition-colors">{label}</span>
+    <label className="flex items-center gap-4 cursor-pointer group p-2">
+      <div className="relative flex items-center justify-center">
+         <input type="radio" name={name} defaultChecked={checked} className="peer sr-only" />
+         <div className="w-5 h-5 rounded-md border-2 border-slate-200 dark:border-slate-800 peer-checked:border-indigo-600 peer-checked:bg-indigo-600 transition-all" />
+         <Zap size={10} className="absolute text-white opacity-0 peer-checked:opacity-100 transition-opacity" />
+      </div>
+      <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-600 peer-checked:text-slate-900 dark:peer-checked:text-white group-hover:text-indigo-500 transition-colors">{label}</span>
     </label>
   );
 }

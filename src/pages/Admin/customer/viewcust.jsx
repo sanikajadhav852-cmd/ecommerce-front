@@ -31,134 +31,138 @@ export default function ViewCustomers() {
   );
 
   return (
-    <div className="p-8 bg-[#f8fafc] min-h-screen text-slate-900 font-sans">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 p-6 md:p-10 text-slate-900 dark:text-white transition-colors duration-500">
       
-      {/* Header Section */}
-      <div className="max-w-7xl mx-auto mb-8">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div>
-            <div className="flex items-center gap-2 text-sm font-medium text-slate-500 mb-1">
-              <span>Dashboard</span>
-              <ChevronDown size={14} className="-rotate-90" />
-              <span className="text-indigo-600">Customers</span>
+      {/* --- HEADER SECTION --- */}
+      <div className="max-w-7xl mx-auto mb-10">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-slate-400 dark:text-slate-500">
+              <span className="hover:text-indigo-600 cursor-pointer transition-colors">Orbit</span>
+              <ChevronDown size={14} className="-rotate-90 text-slate-300 dark:text-slate-700" />
+              <span className="text-indigo-600 dark:text-indigo-400">Civilian Nodes</span>
             </div>
-            <h1 className="text-3xl font-extrabold tracking-tight text-slate-900">Customer Directory</h1>
+            <h1 className="text-4xl font-black tracking-tight text-slate-900 dark:text-white">Customer Matrix</h1>
           </div>
           
           <div className="flex items-center gap-3">
-            <button className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 rounded-lg text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-all shadow-sm">
-              <Download size={18} />
+            <button className="flex items-center gap-3 px-6 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl text-xs font-black uppercase tracking-widest text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all shadow-sm">
+              <Download size={18} className="text-indigo-600" />
               Export
             </button>
-            <button className="flex items-center gap-2 px-4 py-2 bg-indigo-600 rounded-lg text-sm font-semibold text-white hover:bg-indigo-700 transition-all shadow-md shadow-indigo-100">
+            <button className="flex items-center gap-3 px-6 py-3 bg-indigo-600 text-white rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-indigo-700 hover:-translate-y-1 transition-all shadow-xl shadow-indigo-200 dark:shadow-none">
               <UserPlus size={18} />
-              Add Customer
+              Onboard User
             </button>
           </div>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto space-y-4">
-        {/* Search & Filters Bar */}
-        <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col md:flex-row justify-between gap-4">
-          <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+      <div className="max-w-7xl mx-auto space-y-6">
+        {/* --- SEARCH & CONTROL CENTER --- */}
+        <div className="bg-white dark:bg-slate-900 p-6 rounded-[2.5rem] border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col md:flex-row justify-between gap-6">
+          <div className="relative flex-1 max-w-xl group">
+            <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-600 transition-colors" size={20} />
             <input
               type="text"
-              placeholder="Search by name, email, or city..."
+              placeholder="Query biometric or network identity..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all text-sm"
+              className="w-full pl-14 pr-6 py-4 bg-slate-50 dark:bg-slate-950 border-2 border-transparent focus:border-indigo-500/30 rounded-2xl text-[0.9375rem] font-bold text-slate-900 dark:text-white outline-none transition-all placeholder:text-slate-300 dark:placeholder:text-slate-700"
             />
           </div>
 
-          <div className="flex items-center gap-2">
-            <div className="h-8 w-[1px] bg-slate-200 mx-2 hidden md:block" />
+          <div className="flex items-center gap-3 bg-slate-50 dark:bg-slate-950 p-1.5 rounded-2xl border border-slate-100 dark:border-slate-800">
+            <div className="flex items-center gap-1.5 px-2">
+              <button 
+                onClick={() => setViewMode('grid')}
+                className={`p-2.5 rounded-xl transition-all ${viewMode === 'grid' ? 'bg-white dark:bg-slate-900 text-indigo-600 shadow-sm' : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'}`}
+              >
+                <Grid size={20} />
+              </button>
+              <button 
+                onClick={() => setViewMode('list')}
+                className={`p-2.5 rounded-xl transition-all ${viewMode === 'list' ? 'bg-white dark:bg-slate-900 text-indigo-600 shadow-sm' : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'}`}
+              >
+                <List size={20} />
+              </button>
+            </div>
             
-            <button 
-              onClick={() => setViewMode('grid')}
-              className={`p-2 rounded-md transition-all ${viewMode === 'grid' ? 'bg-indigo-50 text-indigo-600' : 'text-slate-400 hover:bg-slate-100'}`}
-            >
-              <Grid size={20} />
-            </button>
-            <button 
-              onClick={() => setViewMode('list')}
-              className={`p-2 rounded-md transition-all ${viewMode === 'list' ? 'bg-indigo-50 text-indigo-600' : 'text-slate-400 hover:bg-slate-100'}`}
-            >
-              <List size={20} />
-            </button>
+            <div className="w-px h-8 bg-slate-200 dark:bg-slate-800" />
             
-            <button className="p-2 text-slate-400 hover:bg-slate-100 rounded-md transition-all">
-              <RotateCw size={20} />
+            <button className="p-2.5 text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 rounded-xl transition-all">
+              <RotateCw size={20} className={loading ? 'animate-spin' : ''} />
             </button>
           </div>
         </div>
 
-        {/* Table/List Container */}
-        <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+        {/* --- DATA MATRIX --- */}
+        <div className="bg-white dark:bg-slate-900 rounded-[3rem] border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="bg-slate-50/50 border-b border-slate-200">
-                  {visibleColumns.name && <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Customer</th>}
-                  {visibleColumns.mobile && <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Contact</th>}
-                  {visibleColumns.city && <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Location</th>}
-                  {visibleColumns.balance && <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Balance</th>}
-                  {visibleColumns.status && <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Status</th>}
-                  {visibleColumns.actions && <th className="px-6 py-4 text-right text-xs font-bold text-slate-500 uppercase tracking-wider">Actions</th>}
+                <tr className="bg-slate-50/50 dark:bg-slate-950/50">
+                  {visibleColumns.name && <th className="px-8 py-5 text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Nexus ID</th>}
+                  {visibleColumns.mobile && <th className="px-8 py-5 text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Comm-Link</th>}
+                  {visibleColumns.city && <th className="px-8 py-5 text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Sector</th>}
+                  {visibleColumns.balance && <th className="px-8 py-5 text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Credits</th>}
+                  {visibleColumns.status && <th className="px-8 py-5 text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Status</th>}
+                  {visibleColumns.actions && <th className="px-8 py-5 text-right text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Ops</th>}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                 {loading ? (
                   <tr>
-                    <td colSpan={6} className="py-24 text-center">
-                      <Loader2 className="animate-spin h-10 w-10 mx-auto text-indigo-500 mb-4" />
-                      <span className="text-slate-500 font-medium">Fetching records...</span>
+                    <td colSpan={6} className="py-32 text-center">
+                      <div className="flex flex-col items-center gap-4">
+                        <div className="w-16 h-16 border-4 border-indigo-500/10 border-t-indigo-500 rounded-full animate-spin" />
+                        <span className="text-xs font-black uppercase tracking-widest text-slate-400 dark:text-slate-500">Scanning frequency...</span>
+                      </div>
                     </td>
                   </tr>
                 ) : filteredCustomers.length === 0 ? (
                   <tr>
-                    <td colSpan={6} className="py-24 text-center">
-                      <div className="bg-slate-50 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <Search className="text-slate-300" size={28} />
+                    <td colSpan={6} className="py-32 text-center">
+                      <div className="bg-slate-50 dark:bg-slate-950 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 border border-slate-100 dark:border-slate-800">
+                        <Search className="text-slate-200 dark:text-slate-800" size={32} />
                       </div>
-                      <h3 className="text-slate-900 font-semibold">No customers found</h3>
-                      <p className="text-slate-500 text-sm">Try adjusting your search or filters.</p>
+                      <h3 className="text-xl font-black text-slate-900 dark:text-white">No entity detected</h3>
+                      <p className="text-xs font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 mt-2">Adjust query parameters.</p>
                     </td>
                   </tr>
                 ) : (
                   filteredCustomers.map((customer) => (
-                    <tr key={customer.id} className="hover:bg-slate-50/80 transition-colors group">
-                      <td className="px-6 py-4">
-                        <div className="flex items-center gap-3">
-                          <div className="h-10 w-10 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center text-white font-bold text-sm shadow-sm">
+                    <tr key={customer.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-all group">
+                      <td className="px-8 py-6">
+                        <div className="flex items-center gap-4">
+                          <div className="h-14 w-14 rounded-2xl bg-gradient-to-tr from-indigo-600 to-indigo-400 flex items-center justify-center text-white font-black text-lg shadow-lg group-hover:scale-110 transition-transform duration-500">
                             {customer.name.charAt(0)}
                           </div>
                           <div>
-                            <div className="font-semibold text-slate-900">{customer.name}</div>
-                            <div className="text-xs text-slate-500">{customer.email}</div>
+                            <div className="font-black text-slate-900 dark:text-white text-base leading-tight">{customer.name}</div>
+                            <div className="text-xs font-bold text-slate-400 dark:text-slate-500 mt-0.5">{customer.email}</div>
                           </div>
                         </div>
                       </td>
-                      <td className="px-6 py-4 text-sm text-slate-600 font-medium">{customer.mobile}</td>
-                      <td className="px-6 py-4 text-sm text-slate-600">{customer.city}</td>
-                      <td className="px-6 py-4 text-sm font-bold text-slate-900">₹{customer.balance}</td>
-                      <td className="px-6 py-4">
-                        <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold border ${
+                      <td className="px-8 py-6 text-xs font-black text-slate-600 dark:text-slate-400 uppercase tracking-widest">{customer.mobile}</td>
+                      <td className="px-8 py-6 text-xs font-black text-slate-600 dark:text-slate-400 uppercase tracking-widest">{customer.city}</td>
+                      <td className="px-8 py-6 text-sm font-black text-indigo-601 dark:text-indigo-400 leading-none">₹{customer.balance}</td>
+                      <td className="px-8 py-6">
+                        <span className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest border ${
                           customer.status === 'Active' 
-                            ? 'bg-emerald-50 text-emerald-700 border-emerald-100' 
-                            : 'bg-slate-50 text-slate-600 border-slate-200'
+                            ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20' 
+                            : 'bg-slate-100 dark:bg-slate-800 text-slate-500 border-slate-200 dark:border-slate-700'
                         }`}>
-                          <span className={`h-1.5 w-1.5 rounded-full ${customer.status === 'Active' ? 'bg-emerald-500' : 'bg-slate-400'}`} />
+                          <div className={`h-1.5 w-1.5 rounded-full ${customer.status === 'Active' ? 'bg-emerald-500 animate-pulse' : 'bg-slate-400'}`} />
                           {customer.status}
                         </span>
                       </td>
-                      <td className="px-6 py-4 text-right">
-                        <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                          <button className="p-2 hover:bg-white hover:shadow-sm border border-transparent hover:border-slate-200 rounded-md text-slate-600 transition-all" title="View Details">
+                      <td className="px-8 py-6 text-right">
+                        <div className="flex justify-end gap-2">
+                          <button className="p-3 bg-white dark:bg-slate-900 text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 border border-slate-100 dark:border-slate-800 rounded-xl shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all" title="View Profile">
                             <Eye size={18} />
                           </button>
-                          <button className="p-2 hover:bg-white hover:shadow-sm border border-transparent hover:border-slate-200 rounded-md text-slate-600 transition-all">
+                          <button className="p-3 bg-white dark:bg-slate-900 text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 border border-slate-100 dark:border-slate-800 rounded-xl shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all">
                             <MoreHorizontal size={18} />
                           </button>
                         </div>
@@ -170,14 +174,14 @@ export default function ViewCustomers() {
             </table>
           </div>
           
-          {/* Pagination Footer (Placeholder) */}
-          <div className="px-6 py-4 bg-slate-50/50 border-t border-slate-200 flex items-center justify-between">
-            <p className="text-sm text-slate-500">
-              Showing <span className="font-semibold text-slate-900">{filteredCustomers.length}</span> results
+          {/* --- PAGINATION CONSOLE --- */}
+          <div className="px-8 py-6 bg-slate-50/50 dark:bg-slate-950/50 border-t border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500">
+              Protocol: <span className="text-slate-900 dark:text-white">{filteredCustomers.length} Entities Online</span>
             </p>
-            <div className="flex gap-2">
-              <button className="px-3 py-1 text-sm font-medium text-slate-500 hover:text-slate-900 disabled:opacity-50" disabled>Previous</button>
-              <button className="px-3 py-1 text-sm font-medium text-indigo-600 hover:text-indigo-700">Next</button>
+            <div className="flex gap-4">
+              <button className="px-5 py-2.5 text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 hover:text-slate-900 dark:hover:text-white disabled:opacity-30 transition-colors" disabled>Back</button>
+              <button className="px-8 py-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-indigo-600 dark:text-indigo-400 rounded-xl text-[10px] font-black uppercase tracking-widest shadow-sm hover:-translate-y-0.5 transition-all">Advance</button>
             </div>
           </div>
         </div>

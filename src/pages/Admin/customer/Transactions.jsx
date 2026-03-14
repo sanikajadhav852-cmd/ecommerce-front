@@ -33,133 +33,138 @@ export default function ViewTransactions() {
 
   const getStatusStyle = (status) => {
     switch (status) {
-      case 'Success': return 'bg-emerald-50 text-emerald-700 border-emerald-100 italic-none';
-      case 'Failed': return 'bg-rose-50 text-rose-700 border-rose-100';
-      case 'Pending': return 'bg-amber-50 text-amber-700 border-amber-100';
-      default: return 'bg-slate-50 text-slate-600 border-slate-100';
+      case 'Success': return 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20';
+      case 'Failed': return 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20';
+      case 'Pending': return 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20';
+      default: return 'bg-slate-500/10 text-slate-600 dark:text-slate-400 border-slate-500/20';
     }
   };
 
   const getStatusIcon = (status) => {
     switch (status) {
-      case 'Success': return <CheckCircle2 size={14} />;
+      case 'Success': return <CheckCircle2 size={14} className="animate-pulse" />;
       case 'Failed': return <XCircle size={14} />;
-      case 'Pending': return <Clock size={14} />;
+      case 'Pending': return <Clock size={14} className="animate-spin-slow" />;
       default: return null;
     }
   };
 
   return (
-    <div className="p-8 bg-[#fcfcfd] min-h-screen font-sans text-slate-900 uppercase-none">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 p-6 md:p-10 text-slate-900 dark:text-white transition-colors duration-500">
       
-      {/* --- Header Section --- */}
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-        <div>
-          <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Transactions</h1>
-          <p className="text-slate-500 text-sm mt-1 font-medium">Monitor and manage customer payments and order history.</p>
+      {/* --- HEADER CONSOLE --- */}
+      <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-6">
+        <div className="space-y-1">
+          <div className="flex items-center gap-2 text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-[0.2em]">
+            <Receipt size={14} />
+            <span>Financial Node</span>
+          </div>
+          <h1 className="text-4xl font-black text-slate-900 dark:text-white tracking-tight">Ledger Matrix</h1>
         </div>
-        <div className="flex gap-3">
-          <button className="flex items-center gap-2 px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm font-semibold text-slate-700 hover:shadow-md transition-all">
-            <Download size={18} className="text-slate-400" />
-            Download Statement
+        <div className="flex gap-4">
+          <button className="flex items-center gap-3 px-6 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl text-xs font-black uppercase tracking-widest text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all shadow-sm">
+            <Download size={18} className="text-indigo-600" />
+            Export Protocol
           </button>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto">
-        {/* --- Toolbar --- */}
-        <div className="flex flex-col md:flex-row gap-4 mb-6">
-          <div className="relative flex-1">
-            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+      <div className="max-w-7xl mx-auto space-y-6">
+        {/* --- CONTROL CENTER --- */}
+        <div className="bg-white dark:bg-slate-900 p-6 rounded-[2.5rem] border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col md:flex-row justify-between gap-6">
+          <div className="relative flex-1 group">
+            <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-600 transition-colors" size={20} />
             <input
               type="text"
-              placeholder="Search by User, Transaction ID or Order ID..."
+              placeholder="Query identity, order hash, or transaction node..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-11 pr-4 py-3 bg-white border border-slate-200 rounded-xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none transition-all text-sm shadow-sm"
+              className="w-full pl-14 pr-6 py-4 bg-slate-50 dark:bg-slate-950 border-2 border-transparent focus:border-indigo-500/30 rounded-2xl text-[0.9375rem] font-bold text-slate-900 dark:text-white outline-none transition-all placeholder:text-slate-300 dark:placeholder:text-slate-700 font-mono"
             />
           </div>
-          <div className="flex gap-2">
+          <div className="flex gap-3">
             <button 
               onClick={() => setShowFilters(!showFilters)}
-              className="flex items-center gap-2 px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm font-semibold text-slate-600 hover:bg-slate-50"
+              className={`flex items-center gap-3 px-6 py-4 rounded-2xl text-xs font-black uppercase tracking-widest transition-all border ${showFilters ? 'bg-indigo-600 text-white border-indigo-600 shadow-lg' : 'bg-slate-50 dark:bg-slate-950 text-slate-600 dark:text-slate-400 border-slate-100 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-900'}`}
             >
-              <Filter size={18} className={showFilters ? "text-indigo-600" : "text-slate-400"} />
+              <Filter size={18} />
               Filters
             </button>
-            <button className="p-3 bg-white border border-slate-200 rounded-xl text-slate-400 hover:text-indigo-600 transition-colors shadow-sm">
-              <RotateCw size={18} />
+            <button className="p-4 bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800 rounded-2xl text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all shadow-sm">
+              <RotateCw size={18} className={loading ? 'animate-spin' : ''} />
             </button>
           </div>
         </div>
 
-        {/* --- Table Component --- */}
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+        {/* --- DATA MATRIX --- */}
+        <div className="bg-white dark:bg-slate-900 rounded-[3rem] border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="bg-slate-50/50 border-b border-slate-200">
-                  <th className="px-6 py-4 text-[11px] font-bold text-slate-400 uppercase tracking-widest">Transaction / User</th>
-                  <th className="px-6 py-4 text-[11px] font-bold text-slate-400 uppercase tracking-widest">Order Details</th>
-                  <th className="px-6 py-4 text-[11px] font-bold text-slate-400 uppercase tracking-widest text-right">Amount</th>
-                  <th className="px-6 py-4 text-[11px] font-bold text-slate-400 uppercase tracking-widest">Status</th>
-                  <th className="px-6 py-4 text-[11px] font-bold text-slate-400 uppercase tracking-widest">Date</th>
-                  <th className="px-6 py-4 text-right text-[11px] font-bold text-slate-400 uppercase tracking-widest"></th>
+                <tr className="bg-slate-50/50 dark:bg-slate-950/50 border-b border-slate-100 dark:border-slate-800">
+                  <th className="px-8 py-5 text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Transaction / Identity</th>
+                  <th className="px-8 py-5 text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Nexus Link</th>
+                  <th className="px-8 py-5 text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest text-right">Credits</th>
+                  <th className="px-8 py-5 text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">State</th>
+                  <th className="px-8 py-5 text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Timestamp</th>
+                  <th className="px-8 py-5 text-right text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest"></th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody className="divide-y divide-slate-100 dark:divide-slate-800/50">
                 {loading ? (
                   <tr>
-                    <td colSpan={6} className="py-24 text-center">
-                      <Loader2 className="animate-spin h-9 w-9 mx-auto text-indigo-500 mb-3" />
-                      <p className="text-slate-500 font-medium animate-pulse">Processing ledger data...</p>
+                    <td colSpan={6} className="py-32 text-center">
+                      <div className="flex flex-col items-center gap-4">
+                        <div className="w-16 h-16 border-4 border-indigo-500/10 border-t-indigo-500 rounded-full animate-spin" />
+                        <span className="text-xs font-black uppercase tracking-widest text-slate-400 dark:text-slate-500">Syncing ledger stream...</span>
+                      </div>
                     </td>
                   </tr>
                 ) : filteredTransactions.length === 0 ? (
                   <tr>
                     <td colSpan={6} className="py-32 text-center">
-                      <div className="bg-slate-50 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 border border-slate-100">
-                        <Receipt className="text-slate-300" size={32} />
+                      <div className="bg-slate-50 dark:bg-slate-950 w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6 border border-slate-100 dark:border-slate-800">
+                        <Receipt className="text-slate-200 dark:text-slate-800" size={40} />
                       </div>
-                      <h3 className="text-slate-900 font-bold text-lg">No transactions found</h3>
-                      <p className="text-slate-500 text-sm max-w-xs mx-auto">We couldn't find any records matching your search. Try clearing your filters.</p>
+                      <h3 className="text-xl font-black text-slate-900 dark:text-white">Void detected</h3>
+                      <p className="text-xs font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 mt-2 max-w-xs mx-auto">No records detected in the specified coordinates.</p>
                     </td>
                   </tr>
                 ) : (
                   filteredTransactions.map((tx) => (
-                    <tr key={tx.id} className="hover:bg-slate-50/50 transition-colors group">
-                      <td className="px-6 py-5">
-                        <div className="flex items-center gap-3">
-                          <div className="hidden sm:flex h-9 w-9 rounded-lg bg-slate-100 items-center justify-center text-slate-600 font-bold text-xs border border-slate-200 uppercase tracking-tighter">
-                            {tx.id.split('-')[0]}
+                    <tr key={tx.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/20 transition-all group">
+                      <td className="px-8 py-6">
+                        <div className="flex items-center gap-4">
+                          <div className="hidden sm:flex h-12 w-12 rounded-2xl bg-indigo-500/10 dark:bg-indigo-500/5 items-center justify-center text-indigo-600 dark:text-indigo-400 font-black text-[10px] border border-indigo-500/20 uppercase tracking-tighter">
+                            {tx.id.split('-')[1]}
                           </div>
                           <div>
-                            <div className="text-sm font-bold text-slate-900 font-mono tracking-tight">{tx.id}</div>
-                            <div className="text-xs text-slate-500 font-medium mt-0.5">{tx.userName}</div>
+                            <div className="text-sm font-black text-slate-900 dark:text-white font-mono tracking-tighter leading-none group-hover:text-indigo-600 transition-colors uppercase">#{tx.id}</div>
+                            <div className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase mt-1 tracking-widest">{tx.userName}</div>
                           </div>
                         </div>
                       </td>
-                      <td className="px-6 py-5">
-                        <div className="text-sm text-indigo-600 font-semibold cursor-pointer hover:underline flex items-center gap-1">
+                      <td className="px-8 py-6">
+                        <div className="text-sm font-black text-indigo-600 dark:text-indigo-400 cursor-pointer hover:text-indigo-700 transition-all flex items-center gap-2 font-mono">
                           {tx.orderId}
-                          <ArrowUpRight size={12} className="opacity-0 group-hover:opacity-100" />
+                          <ArrowUpRight size={14} className="opacity-0 group-hover:opacity-100 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                         </div>
-                        <div className="text-[11px] text-slate-400 font-mono mt-1">{tx.transactionId}</div>
+                        <div className="text-[10px] font-black text-slate-400 dark:text-slate-500 font-mono mt-1 opacity-60 tracking-tighter">{tx.transactionId}</div>
                       </td>
-                      <td className="px-6 py-5 text-right">
-                        <div className="text-sm font-bold text-slate-900 tracking-tight">₹{tx.amount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</div>
+                      <td className="px-8 py-6 text-right">
+                        <div className="text-base font-black text-slate-900 dark:text-white tracking-tighter font-mono">₹{tx.amount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</div>
                       </td>
-                      <td className="px-6 py-5">
-                        <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold border transition-colors ${getStatusStyle(tx.status)}`}>
+                      <td className="px-8 py-6">
+                        <span className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest border transition-all ${getStatusStyle(tx.status)}`}>
                           {getStatusIcon(tx.status)}
                           {tx.status}
                         </span>
                       </td>
-                      <td className="px-6 py-5">
-                        <div className="text-sm text-slate-600 font-medium">{tx.date}</div>
+                      <td className="px-8 py-6 text-[10px] font-black text-slate-500 dark:text-slate-500 uppercase tracking-widest mt-1">
+                        {tx.date}
                       </td>
-                      <td className="px-6 py-5 text-right">
-                        <button className="p-2 text-slate-400 hover:text-indigo-600 hover:bg-white border border-transparent hover:border-slate-200 rounded-lg transition-all">
+                      <td className="px-8 py-6 text-right">
+                        <button className="p-3 text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-white dark:hover:bg-slate-950 border border-transparent hover:border-slate-100 dark:hover:border-slate-800 rounded-xl transition-all shadow-sm hover:shadow-lg">
                           <MoreHorizontal size={18} />
                         </button>
                       </td>
@@ -170,16 +175,16 @@ export default function ViewTransactions() {
             </table>
           </div>
           
-          {/* --- Pagination Info --- */}
+          {/* --- TERMINAL FOOTER --- */}
           {!loading && filteredTransactions.length > 0 && (
-            <div className="px-6 py-4 bg-slate-50/30 border-t border-slate-100 flex items-center justify-between">
-              <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">
-                Ledger Page 1 of 1
+            <div className="px-8 py-6 bg-slate-50/50 dark:bg-slate-950/50 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+              <span className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em]">
+                Page Stream <span className="text-slate-900 dark:text-white">01 / 01</span>
               </span>
-              <div className="flex items-center gap-4">
-                <button className="text-xs font-bold text-slate-400 cursor-not-allowed uppercase" disabled>Previous</button>
-                <div className="h-4 w-px bg-slate-200" />
-                <button className="text-xs font-bold text-indigo-600 hover:text-indigo-800 uppercase tracking-wider">Next Page</button>
+              <div className="flex items-center gap-6">
+                <button className="text-[10px] font-black text-slate-300 dark:text-slate-700 cursor-not-allowed uppercase tracking-widest" disabled>Halt</button>
+                <div className="h-6 w-px bg-slate-200 dark:bg-slate-800" />
+                <button className="text-[10px] font-black text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 uppercase tracking-widest transition-colors">Advance Nodes</button>
               </div>
             </div>
           )}

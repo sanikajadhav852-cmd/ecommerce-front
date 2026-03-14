@@ -6,8 +6,14 @@ import {
   Download, 
   ChevronDown, 
   MoreVertical, 
-  ExternalLink 
+  ExternalLink,
+  Truck,
+  Activity,
+  Shield,
+  ChevronRight,
+  Database
 } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function OrderTracking() {
   const [loading, setLoading] = useState(false);
@@ -19,129 +25,169 @@ export default function OrderTracking() {
   const handleRefresh = () => {
     setLoading(true);
     // Simulate API fetch
-    setTimeout(() => setLoading(false), 500);
+    setTimeout(() => setLoading(false), 800);
   };
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-500 p-4 lg:p-0">
-      {/* Page Header Area */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-semibold text-[#4e5e7a]">Order Tracking</h1>
+    <div className="min-h-screen bg-background-site dark:bg-slate-950 p-6 md:p-10 text-text-pri dark:text-white transition-colors duration-500 font-sans pb-24">
+      
+      {/* --- HEADER CONSOLE --- */}
+      <header className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center mb-16 gap-8 relative z-10">
+        <div className="space-y-3">
+          <div className="flex items-center gap-3 text-[10px] font-black text-primary dark:text-primary-light uppercase tracking-[0.4em]">
+            <Truck size={16} className="text-primary animate-pulse" />
+            <span>Logistics Vector v3.0</span>
+          </div>
+          <h1 className="text-5xl font-black text-text-pri dark:text-white tracking-tighter uppercase leading-none">Telemetry Hub</h1>
         </div>
         
-        {/* Breadcrumbs */}
-        <div className="flex items-center gap-2 text-sm">
-          <span className="text-gray-400">Home</span>
-          <span className="text-gray-300">/</span>
-          <span className="text-[#4e5e7a] font-medium">Order Tracking</span>
+        <div className="flex items-center gap-4 bg-surface dark:bg-slate-900 p-3 rounded-[2.5rem] shadow-sm border border-slate-200 dark:border-slate-800 transition-all">
+          <div className="px-6 py-4 text-[10px] font-black text-primary dark:text-primary-light bg-primary/5 dark:bg-primary-light/5 rounded-[1.5rem] border border-primary/10 dark:border-primary-light/10 flex items-center gap-3">
+            <RefreshCw size={18} className={loading ? 'animate-spin' : ''} /> Telemetry Signal: Nominal
+          </div>
+          <button className="flex items-center gap-3 text-[10px] font-black text-slate-400 dark:text-slate-600 px-6 py-4 rounded-[1.5rem] hover:bg-background-site transition-all">
+             Admin <ChevronRight size={14} /> <span className="text-primary tracking-widest uppercase">TRACKING</span>
+          </button>
         </div>
-      </div>
+      </header>
 
-      {/* Main Content Card */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-        
-        {/* Table Controls (Search & Tools) */}
-        <div className="p-6 flex flex-col md:flex-row md:items-center justify-end gap-4">
-          <div className="flex flex-wrap items-center gap-2">
-            
-            {/* Search Input */}
-            <div className="relative">
+      <main className="max-w-7xl mx-auto space-y-12">
+        {/* Main Matrix Card */}
+        <div className="bg-surface dark:bg-slate-900 rounded-[4rem] border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden transition-all flex flex-col group relative">
+          <div className="absolute top-0 left-0 -ml-20 -mt-20 w-80 h-80 bg-primary/5 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
+          
+          {/* Action Hub */}
+          <div className="p-12 flex flex-col xl:flex-row xl:items-center justify-between gap-10 border-b border-slate-50 dark:border-slate-800/50 bg-background-site/20 dark:bg-slate-950/20 relative z-10">
+            <div className="relative group/search flex-1 max-w-2xl">
+              <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within/search:text-primary transition-all" size={24} />
               <input 
                 type="text" 
-                placeholder="Search" 
-                className="pl-4 pr-10 py-2 border border-gray-200 rounded-md text-sm focus:ring-1 focus:ring-purple-500 outline-none w-full md:w-64"
+                placeholder="Query Registry Sequence..." 
+                className="w-full pl-16 pr-8 py-6 bg-background-site dark:bg-slate-950 border-2 border-transparent focus:border-primary/10 rounded-[2rem] text-sm font-black text-text-pri dark:text-white outline-none transition-all placeholder:text-slate-200 shadow-inner"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
 
-            {/* Action Buttons Group */}
-            <div className="flex items-center bg-[#f8f9fa] border border-gray-200 rounded-md">
-              <button 
-                onClick={handleRefresh}
-                className={`p-2 hover:bg-white transition-all border-r border-gray-200 ${loading ? 'animate-spin' : ''}`}
-                title="Refresh"
-              >
-                <RefreshCw size={18} className="text-gray-600" />
-              </button>
-              
-              <button className="p-2 hover:bg-white transition-all border-r border-gray-200 flex items-center gap-1" title="Columns">
-                <List size={18} className="text-gray-600" />
-                <ChevronDown size={12} className="text-gray-400" />
-              </button>
-              
-              <button className="p-2 hover:bg-white transition-all flex items-center gap-1" title="Export">
-                <Download size={18} className="text-gray-600" />
-                <ChevronDown size={12} className="text-gray-400" />
-              </button>
+            <div className="flex items-center gap-4 bg-background-site dark:bg-slate-950 p-2 rounded-[2rem] border border-slate-100 dark:border-slate-800 shadow-inner shrink-0">
+                <button 
+                  onClick={handleRefresh}
+                  className="p-5 text-slate-400 hover:text-primary hover:bg-surface dark:hover:bg-slate-900 rounded-[1.5rem] transition-all active:scale-90" 
+                  title="Sync Matrix"
+                >
+                  <RefreshCw size={24} className={loading ? 'animate-spin' : ''} />
+                </button>
+                
+                <div className="relative group/filter">
+                  <button className="flex items-center gap-4 px-6 py-5 text-slate-400 hover:text-primary hover:bg-surface dark:hover:bg-slate-900 rounded-[1.5rem] transition-all">
+                    <List size={22} />
+                    <span className="text-[10px] font-black uppercase tracking-widest hidden sm:inline">Filter Protocol</span>
+                    <ChevronDown size={14} className="opacity-50 group-hover/filter:rotate-180 transition-transform" />
+                  </button>
+                </div>
+                
+                <button className="flex items-center gap-4 px-10 py-5 bg-slate-900 dark:bg-black text-white rounded-[1.5rem] text-[10px] font-black uppercase tracking-[0.3em] shadow-xl hover:scale-105 active:scale-95 transition-all">
+                  <Download size={20} /> Export Vector
+                </button>
             </div>
           </div>
-        </div>
 
-        {/* Data Table */}
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-sm border-collapse">
-            <thead className="bg-[#fcfcfd] border-t border-b border-gray-100">
-              <tr>
-                <th className="px-6 py-4 font-bold text-[#4e5e7a] border-r border-gray-50 flex items-center justify-between">
-                  ID <ChevronDown size={14} className="text-purple-600" />
-                </th>
-                <th className="px-6 py-4 font-bold text-[#4e5e7a] border-r border-gray-50">
-                  <div className="flex items-center justify-between">
-                    ORDER ID <div className="flex flex-col gap-0.5"><ChevronDown size={10} className="rotate-180 opacity-30"/><ChevronDown size={10} className="opacity-30"/></div>
-                  </div>
-                </th>
-                <th className="px-6 py-4 font-bold text-[#4e5e7a] border-r border-gray-50 uppercase">
-                  Courier Agency
-                </th>
-                <th className="px-6 py-4 font-bold text-[#4e5e7a] border-r border-gray-50 uppercase">
-                  Tracking ID
-                </th>
-                <th className="px-6 py-4 font-bold text-[#4e5e7a] border-r border-gray-50 uppercase">
-                  URL
-                </th>
-                <th className="px-6 py-4 font-bold text-[#4e5e7a] border-r border-gray-50 uppercase">
-                  Date
-                </th>
-                <th className="px-6 py-4 font-bold text-[#4e5e7a] uppercase text-center">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            
-            <tbody>
-              {trackingData.length === 0 ? (
+          {/* Table Architecture */}
+          <div className="overflow-x-auto min-h-[500px]">
+            <table className="w-full text-left whitespace-nowrap">
+              <thead className="bg-background-site/50 dark:bg-slate-950/50 border-b border-slate-100 dark:border-slate-800">
                 <tr>
-                  <td colSpan="7" className="px-6 py-12 text-center text-[#4e5e7a] font-medium">
-                    No matching records found
-                  </td>
+                  {[
+                    'Core Index', 'Nexus Reference', 'Logistics Provider', 
+                    'Tracking Sequence', 'Redirect URL', 'Timestamp', 'Control'
+                  ].map((h, i) => (
+                    <th key={h} className={`px-10 py-8 text-[10px] font-black text-slate-400 dark:text-slate-600 uppercase tracking-[0.4em] ${i === 6 ? 'text-center' : ''}`}>
+                      <div className="flex items-center justify-between gap-4">
+                        {h}
+                        {i < 6 && <ChevronDown size={14} className="opacity-20" />}
+                      </div>
+                    </th>
+                  ))}
                 </tr>
-              ) : (
-                trackingData.map((row) => (
-                  <tr key={row.id} className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
-                    <td className="px-6 py-4 text-purple-600 font-medium">#{row.id}</td>
-                    <td className="px-6 py-4 text-gray-700">{row.orderId}</td>
-                    <td className="px-6 py-4 text-gray-700">{row.agency}</td>
-                    <td className="px-6 py-4 text-gray-700">{row.trackingId}</td>
-                    <td className="px-6 py-4">
-                      <a href={row.url} target="_blank" rel="noreferrer" className="text-blue-500 hover:underline flex items-center gap-1">
-                        Link <ExternalLink size={12} />
-                      </a>
-                    </td>
-                    <td className="px-6 py-4 text-gray-700">{row.date}</td>
-                    <td className="px-6 py-4 text-center">
-                      <button className="p-1 hover:bg-gray-100 rounded-full transition-colors">
-                        <MoreVertical size={18} className="text-gray-400" />
-                      </button>
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
+              </thead>
+              
+              <tbody className="divide-y divide-slate-50 dark:divide-slate-800/10">
+                <AnimatePresence mode="popLayout">
+                  {trackingData.length === 0 ? (
+                    <tr>
+                      <td colSpan="7" className="px-10 py-60 text-center relative overflow-hidden">
+                        <div className="absolute inset-0 opacity-5 dark:opacity-10 pointer-events-none flex items-center justify-center">
+                           <Database size={400} />
+                        </div>
+                        <div className="relative z-10 flex flex-col items-center">
+                           <Activity size={80} className="text-slate-100 dark:text-slate-800 mb-8 animate-pulse" />
+                           <p className="text-4xl font-black text-slate-200 dark:text-slate-800 uppercase tracking-[0.6em]">Zero Signal Detected</p>
+                           <p className="text-[10px] font-black text-slate-400 dark:text-slate-600 uppercase tracking-[0.4em] mt-4">Sector empty: NO-PAYLOADS-IDENTIFIED</p>
+                        </div>
+                      </td>
+                    </tr>
+                  ) : (
+                    trackingData.map((row) => (
+                      <motion.tr 
+                        initial={{ opacity: 0 }} 
+                        animate={{ opacity: 1 }} 
+                        key={row.id} 
+                        className="group hover:bg-background-site/30 dark:hover:bg-slate-800/30 transition-all duration-500"
+                      >
+                        <td className="px-10 py-8 text-primary dark:text-primary-light font-black tracking-tighter text-sm">
+                           <div className="flex items-center gap-3">
+                              <span className="opacity-30">#</span>{String(row.id).padStart(4, '0')}
+                           </div>
+                        </td>
+                        <td className="px-10 py-8 text-text-pri dark:text-white font-black uppercase tracking-tight">{row.orderId}</td>
+                        <td className="px-10 py-8">
+                          <span className="px-5 py-2 bg-background-site dark:bg-slate-950 border border-slate-100 dark:border-slate-800 rounded-full text-[9px] font-black text-slate-400 dark:text-slate-600 uppercase tracking-[0.2em] group-hover:bg-primary group-hover:text-white group-hover:border-primary transition-all duration-500">
+                            {row.agency}
+                          </span>
+                        </td>
+                        <td className="px-10 py-8 font-mono font-black text-xs text-slate-500 dark:text-slate-400 tracking-tighter">{row.trackingId}</td>
+                        <td className="px-10 py-8">
+                          <a 
+                            href={row.url} 
+                            target="_blank" 
+                            rel="noreferrer" 
+                            className="inline-flex items-center gap-3 px-6 py-2.5 bg-primary/5 text-primary dark:text-primary-light border border-primary/10 rounded-[1.25rem] hover:bg-primary hover:text-white transition-all duration-500 text-[9px] font-black uppercase tracking-widest shadow-sm"
+                          >
+                            Execute Link <ExternalLink size={14} />
+                          </a>
+                        </td>
+                        <td className="px-10 py-8 text-slate-400 dark:text-slate-600 font-black text-[10px] uppercase tracking-tighter">{row.date}</td>
+                        <td className="px-10 py-8 text-center">
+                          <button className="w-12 h-12 inline-flex items-center justify-center text-slate-200 hover:text-primary bg-background-site/50 dark:bg-slate-950/50 rounded-2xl transition-all border border-transparent hover:border-slate-100 dark:hover:border-slate-800 group-hover:shadow-lg">
+                            <MoreVertical size={20} />
+                          </button>
+                        </td>
+                      </motion.tr>
+                    ))
+                  )}
+                </AnimatePresence>
+              </tbody>
+            </table>
+          </div>
+
+          <footer className="p-12 bg-background-site/50 dark:bg-slate-950/50 border-t border-slate-100 dark:border-slate-800 flex justify-between items-center text-[10px] font-black text-slate-400 dark:text-slate-700 uppercase tracking-[0.5em]">
+             <span className="flex items-center gap-3">
+                <div className="w-2 h-2 bg-emerald-500 rounded-full animate-ping" />
+                TELEMETRY INTEGRITY NOMINAL
+             </span>
+             <div className="flex items-center gap-2">
+                <Activity size={14} /> SYS-LOGISTICS-v3.2
+             </div>
+          </footer>
         </div>
-      </div>
+      </main>
+
+      {/* --- FOOTER DESCRIPTOR --- */}
+      <footer className="mt-16 text-center max-w-2xl mx-auto p-12 border-t border-slate-100 dark:border-slate-800/10">
+        <p className="text-[10px] font-black text-slate-400 dark:text-slate-600 uppercase tracking-[0.6em] leading-relaxed">
+          Logistics vector data is computed in <span className="text-primary italic">real-time</span> across all fulfillment endpoints. <br/>Registry latency is minimized for ultimate operational precision.
+        </p>
+      </footer>
     </div>
   );
 }

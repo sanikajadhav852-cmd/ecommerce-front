@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { 
-  Search, RotateCw, Download, MoreVertical, 
+  Search, RotateCw, Download, MoreHorizontal, 
   Loader2, Wallet, ArrowUpCircle, ArrowDownCircle,
   UserPlus, History, Info, AlertCircle
 } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function ManageCustomerWallet() {
   const [customers, setCustomers] = useState([]);
@@ -47,169 +48,182 @@ export default function ManageCustomerWallet() {
   };
 
   return (
-    <div className="p-8 bg-slate-50 min-h-screen font-sans text-slate-900">
-      {/* --- Header --- */}
-      <div className="max-w-7xl mx-auto flex justify-between items-end mb-8">
-        <div>
-          <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Wallet Management</h1>
-          <p className="text-slate-500 text-sm mt-1">Adjust balances and monitor customer ledger entries.</p>
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 p-6 md:p-10 text-slate-900 dark:text-white transition-colors duration-500">
+      {/* --- HEADER CONSOLE --- */}
+      <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-6">
+        <div className="space-y-1">
+          <div className="flex items-center gap-2 text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-[0.2em]">
+            <Wallet size={14} />
+            <span>Financial Node</span>
+          </div>
+          <h1 className="text-4xl font-black text-slate-900 dark:text-white tracking-tight">Wallet Matrix</h1>
         </div>
-        <div className="flex items-center gap-2 px-3 py-1.5 bg-indigo-50 text-indigo-700 rounded-lg text-xs font-bold uppercase tracking-wider">
-          <History size={14} />
-          Audit Log Active
+        <div className="flex items-center gap-3 px-5 py-2.5 bg-indigo-500/10 dark:bg-indigo-500/5 text-indigo-600 dark:text-indigo-400 rounded-2xl text-[10px] font-black uppercase tracking-[0.15em] border border-indigo-500/20">
+          <History size={16} className="animate-pulse" />
+          Neural Audit Log Active
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
         
-        {/* --- Left: Transaction Form (5 cols) --- */}
+        {/* --- LEFT: TRANSACTION FORM (5 COLS) --- */}
         <div className="lg:col-span-5 space-y-6">
-          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-            <div className="p-6 border-b border-slate-100 bg-slate-50/50">
-              <h2 className="text-sm font-bold text-slate-900 uppercase tracking-widest flex items-center gap-2">
-                <Wallet size={18} className="text-indigo-600" />
-                Adjust Balance
+          <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden transition-all duration-300">
+            <div className="p-8 border-b border-slate-100 dark:border-slate-800 bg-slate-50/30 dark:bg-slate-950/30">
+              <h2 className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-[0.2em] flex items-center gap-3">
+                <div className="p-2 bg-indigo-600 rounded-lg text-white">
+                  <Wallet size={18} />
+                </div>
+                Balance Adjuster
               </h2>
             </div>
             
-            <form className="p-6 space-y-5">
+            <form className="p-8 space-y-6">
               {/* Selected User Display */}
-              <div className={`p-4 rounded-xl border-2 transition-all ${selectedUser ? 'border-indigo-100 bg-indigo-50/30' : 'border-dashed border-slate-200 bg-slate-50'}`}>
+              <div className={`p-5 rounded-2xl border-2 transition-all duration-500 ${selectedUser ? 'border-indigo-500/30 bg-indigo-500/5 dark:bg-indigo-500/10 shadow-inner' : 'border-dashed border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50'}`}>
                 {selectedUser ? (
                   <div className="flex justify-between items-center">
                     <div>
-                      <p className="text-xs font-bold text-indigo-600 uppercase tracking-tighter">Selected Customer</p>
-                      <p className="text-sm font-bold text-slate-900">{selectedUser.name}</p>
-                      <p className="text-xs text-slate-500">{selectedUser.email}</p>
+                      <p className="text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest mb-1">Target Identity</p>
+                      <p className="text-lg font-black text-slate-900 dark:text-white leading-none">{selectedUser.name}</p>
+                      <p className="text-xs font-bold text-slate-400 dark:text-slate-500 mt-1">{selectedUser.email}</p>
                     </div>
                     <button 
                       onClick={() => setSelectedUser(null)}
-                      className="text-xs font-bold text-slate-400 hover:text-red-500 underline"
+                      className="text-[10px] font-black text-slate-400 hover:text-red-500 uppercase tracking-widest transition-colors py-2 px-3 hover:bg-red-500/10 rounded-xl border border-transparent hover:border-red-500/20"
                     >
-                      Change
+                      Clear
                     </button>
                   </div>
                 ) : (
-                  <div className="text-center py-2">
-                    <p className="text-sm text-slate-500 font-medium italic">Please select a user from the table</p>
+                  <div className="text-center py-4">
+                    <p className="text-xs text-slate-400 dark:text-slate-600 font-black uppercase tracking-widest italic">Pick an entity from the matrix</p>
                   </div>
                 )}
               </div>
 
               {/* Transaction Type Toggle */}
-              <div className="grid grid-cols-2 gap-2 p-1 bg-slate-100 rounded-lg">
+              <div className="grid grid-cols-2 gap-3 p-1.5 bg-slate-100 dark:bg-slate-950 rounded-[1.5rem] border border-slate-200 dark:border-slate-800">
                 <button
                   type="button"
                   onClick={() => setFormData(f => ({ ...f, type: 'Credit' }))}
-                  className={`flex items-center justify-center gap-2 py-2 rounded-md text-sm font-bold transition-all ${formData.type === 'Credit' ? 'bg-white text-emerald-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                  className={`flex items-center justify-center gap-3 py-3.5 rounded-2xl text-[10px] font-black uppercase tracking-[0.1em] transition-all duration-300 ${formData.type === 'Credit' ? 'bg-white dark:bg-slate-900 text-emerald-600 dark:text-emerald-400 shadow-lg' : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'}`}
                 >
-                  <ArrowUpCircle size={16} /> Credit
+                  <ArrowUpCircle size={18} /> INFUSION
                 </button>
                 <button
                   type="button"
                   onClick={() => setFormData(f => ({ ...f, type: 'Debit' }))}
-                  className={`flex items-center justify-center gap-2 py-2 rounded-md text-sm font-bold transition-all ${formData.type === 'Debit' ? 'bg-white text-rose-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                  className={`flex items-center justify-center gap-3 py-3.5 rounded-2xl text-[10px] font-black uppercase tracking-[0.1em] transition-all duration-300 ${formData.type === 'Debit' ? 'bg-white dark:bg-slate-900 text-rose-600 dark:text-rose-400 shadow-lg' : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'}`}
                 >
-                  <ArrowDownCircle size={16} /> Debit
+                  <ArrowDownCircle size={18} /> EXTRACTION
                 </button>
               </div>
 
               <div>
-                <label className="block text-[11px] font-bold text-slate-500 uppercase mb-1.5 tracking-wide">Amount (INR)</label>
-                <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-bold">₹</span>
+                <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase mb-2 tracking-[0.2em] ml-2">Value Amount (INR)</label>
+                <div className="relative group">
+                  <span className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300 dark:text-slate-700 font-black text-xl group-focus-within:text-indigo-600 transition-colors">₹</span>
                   <input
                     type="number"
                     name="amount"
                     value={formData.amount}
                     onChange={handleInputChange}
-                    className="w-full pl-8 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none transition-all font-mono"
+                    className="w-full pl-10 pr-6 py-4 bg-slate-50 dark:bg-slate-950 border-2 border-transparent focus:border-indigo-500/30 rounded-2xl text-lg font-black text-slate-900 dark:text-white outline-none transition-all placeholder:text-slate-200 dark:placeholder:text-slate-800 font-mono"
                     placeholder="0.00"
                   />
                 </div>
               </div>
 
               {/* Balance Preview */}
-              {selectedUser && formData.amount && (
-                <div className="flex items-center justify-between p-3 bg-slate-900 rounded-xl text-white">
-                  <div className="text-center flex-1">
-                    <p className="text-[10px] text-slate-400 uppercase font-bold tracking-tighter">Current</p>
-                    <p className="font-mono text-sm">₹{selectedUser.balance.toFixed(2)}</p>
-                  </div>
-                  <div className="text-slate-600 px-2">→</div>
-                  <div className="text-center flex-1">
-                    <p className="text-[10px] text-slate-400 uppercase font-bold tracking-tighter">Final</p>
-                    <p className="font-mono text-sm font-bold text-emerald-400">₹{calculateNewBalance()?.toFixed(2)}</p>
-                  </div>
-                </div>
-              )}
+              <AnimatePresence>
+                {selectedUser && formData.amount && (
+                  <motion.div 
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 10 }}
+                    className="flex items-center justify-between p-5 bg-slate-900 dark:bg-slate-950 rounded-2xl text-white border border-indigo-500/20"
+                  >
+                    <div className="text-center flex-1">
+                      <p className="text-[9px] text-slate-500 uppercase font-black tracking-widest mb-1">State</p>
+                      <p className="font-mono text-sm font-bold">₹{selectedUser.balance.toFixed(2)}</p>
+                    </div>
+                    <div className="text-slate-700 mx-3 font-black text-xl">→</div>
+                    <div className="text-center flex-1">
+                      <p className="text-[9px] text-slate-500 uppercase font-black tracking-widest mb-1">Projected</p>
+                      <p className={`font-mono text-sm font-black ${formData.type === 'Credit' ? 'text-emerald-400' : 'text-rose-400 animate-pulse'}`}>₹{calculateNewBalance()?.toFixed(2)}</p>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
 
               <div>
-                <label className="block text-[11px] font-bold text-slate-500 uppercase mb-1.5 tracking-wide">Internal Message / Reason</label>
+                <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase mb-2 tracking-[0.2em] ml-2">Audit Memo / Reason</label>
                 <textarea
                   name="message"
                   value={formData.message}
                   onChange={handleInputChange}
                   rows={3}
-                  className="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none transition-all text-sm"
-                  placeholder="e.g. Refund for Order #123"
+                  className="w-full px-6 py-4 bg-slate-50 dark:bg-slate-950 border-2 border-transparent focus:border-indigo-500/30 rounded-2xl text-[0.9375rem] font-bold text-slate-900 dark:text-white outline-none transition-all placeholder:text-slate-200 dark:placeholder:text-slate-800 resize-none"
+                  placeholder="Describe the financial mutation..."
                 />
               </div>
 
-              <div className="flex items-start gap-2 text-[11px] text-slate-400 bg-amber-50 p-3 rounded-lg border border-amber-100">
-                <Info size={14} className="text-amber-500 shrink-0" />
-                <span>Adjustment will be processed immediately and is visible to the customer.</span>
+              <div className="flex items-start gap-3 text-[10px] font-black text-amber-600 dark:text-amber-400/70 bg-amber-500/5 dark:bg-amber-500/5 p-4 rounded-2xl border border-amber-500/10 uppercase tracking-widest leading-relaxed">
+                <Info size={16} className="text-amber-500 shrink-0" />
+                <span>Adjustments commit instantly to the ledger and notify the entity.</span>
               </div>
 
               <button 
+                type="button"
                 disabled={!selectedUser}
-                className="w-full py-3 bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-200 disabled:text-slate-400 text-white rounded-xl font-bold shadow-lg shadow-indigo-100 transition-all flex items-center justify-center gap-2"
+                className="w-full py-4 bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-100 dark:disabled:bg-slate-800 disabled:text-slate-300 dark:disabled:text-slate-600 text-white rounded-2xl text-xs font-black uppercase tracking-[0.2em] shadow-xl shadow-indigo-600/20 transition-all hover:-translate-y-1 block text-center"
               >
-                Execute Transaction
+                Execute Mutation
               </button>
             </form>
           </div>
         </div>
 
-        {/* --- Right: User Selection (7 cols) --- */}
-        <div className="lg:col-span-7 bg-white rounded-2xl border border-slate-200 shadow-sm flex flex-col overflow-hidden">
-          <div className="p-4 border-b border-slate-100 flex items-center justify-between gap-4">
-            <h2 className="text-sm font-bold text-slate-900 uppercase tracking-widest pl-2">Select User</h2>
-            <div className="relative flex-1 max-w-xs">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
+        {/* --- RIGHT: USER SELECTION (7 COLS) --- */}
+        <div className="lg:col-span-7 bg-white dark:bg-slate-900 rounded-[2.5rem] border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col overflow-hidden">
+          <div className="p-6 border-b border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-6">
+            <h2 className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-[0.2em] pl-2">Entity Matrix</h2>
+            <div className="relative flex-1 max-w-sm w-full group">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-600 transition-colors" size={18} />
               <input
                 type="text"
-                placeholder="Find customer..."
-                className="w-full pl-9 pr-4 py-2 bg-slate-50 border-none rounded-lg text-sm outline-none focus:ring-2 focus:ring-indigo-500/10"
+                placeholder="Identify hub..."
+                className="w-full pl-12 pr-4 py-3 bg-slate-50 dark:bg-slate-950 border-2 border-transparent focus:border-indigo-500/10 rounded-xl text-sm font-bold outline-none transition-all"
               />
             </div>
           </div>
           
-          <div className="flex-1 overflow-auto max-h-[500px]">
+          <div className="flex-1 overflow-auto max-h-[600px]">
             <table className="w-full text-left">
-              <thead className="sticky top-0 bg-white shadow-sm z-10">
-                <tr className="border-b border-slate-100">
-                  <th className="px-6 py-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider">User</th>
-                  <th className="px-6 py-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider text-right">Balance</th>
-                  <th className="px-6 py-3"></th>
+              <thead className="sticky top-0 bg-white dark:bg-slate-900 shadow-sm z-10">
+                <tr className="bg-slate-50/50 dark:bg-slate-950/50">
+                  <th className="px-8 py-4 text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest border-b border-slate-100 dark:border-slate-800">Entity Hub</th>
+                  <th className="px-8 py-4 text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest text-right border-b border-slate-100 dark:border-slate-800">Credit State</th>
+                  <th className="px-8 py-4 border-b border-slate-100 dark:border-slate-800"></th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-50">
+              <tbody className="divide-y divide-slate-50 dark:divide-slate-800/50">
                 {customers.map(c => (
-                  <tr key={c.id} className={`group hover:bg-slate-50 transition-colors ${selectedUser?.id === c.id ? 'bg-indigo-50/50' : ''}`}>
-                    <td className="px-6 py-4">
-                      <div className="text-sm font-bold text-slate-900">{c.name}</div>
-                      <div className="text-xs text-slate-400">{c.email}</div>
+                  <tr key={c.id} className={`group hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-all ${selectedUser?.id === c.id ? 'bg-indigo-500/5 dark:bg-indigo-500/10' : ''}`}>
+                    <td className="px-8 py-5">
+                      <div className="text-[0.9375rem] font-black text-slate-900 dark:text-white leading-tight">{c.name}</div>
+                      <div className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-tighter mt-1">{c.email}</div>
                     </td>
-                    <td className="px-6 py-4 text-right">
-                      <div className="text-sm font-mono font-bold text-slate-700">₹{c.balance.toFixed(2)}</div>
+                    <td className="px-8 py-5 text-right">
+                      <div className="text-sm font-black text-indigo-600 dark:text-indigo-400 font-mono">₹{c.balance.toFixed(2)}</div>
                     </td>
-                    <td className="px-6 py-4 text-right">
+                    <td className="px-8 py-5 text-right">
                       <button 
                         onClick={() => setSelectedUser(c)}
-                        className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${selectedUser?.id === c.id ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-600 group-hover:bg-indigo-100 group-hover:text-indigo-700'}`}
+                        className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${selectedUser?.id === c.id ? 'bg-indigo-600 text-white shadow-lg' : 'bg-slate-100 dark:bg-slate-950 text-slate-500 dark:text-slate-400 hover:bg-indigo-600 hover:text-white'}`}
                       >
-                        {selectedUser?.id === c.id ? 'Selected' : 'Select'}
+                        {selectedUser?.id === c.id ? 'Active' : 'Deploy'}
                       </button>
                     </td>
                   </tr>
@@ -220,46 +234,49 @@ export default function ManageCustomerWallet() {
         </div>
       </div>
 
-      {/* --- Bottom: History Table --- */}
-      <div className="max-w-7xl mx-auto mt-8 bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-        <div className="px-6 py-4 border-b border-slate-100 flex justify-between items-center">
-          <h2 className="text-sm font-bold text-slate-900 uppercase tracking-widest flex items-center gap-2">
-            <History size={18} className="text-slate-400" />
-            Wallet Activity
+      {/* --- BOTTOM: HISTORY CONSOLE --- */}
+      <div className="max-w-7xl mx-auto mt-10 bg-white dark:bg-slate-900 rounded-[3rem] border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+        <div className="px-8 py-6 border-b border-slate-100 dark:border-slate-800 bg-slate-50/20 dark:bg-slate-950/20 flex justify-between items-center">
+          <h2 className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-[0.2em] flex items-center gap-3">
+            <div className="p-2 bg-slate-100 dark:bg-slate-950 rounded-lg">
+              <History size={18} className="text-slate-400 dark:text-slate-600" />
+            </div>
+            Mutation History
           </h2>
-          <button className="p-2 hover:bg-slate-50 rounded-lg transition-colors text-slate-400">
+          <button className="p-3 hover:bg-slate-50 dark:hover:bg-slate-950 rounded-xl transition-all text-slate-400 hover:text-indigo-600 border border-transparent hover:border-slate-200 dark:hover:border-slate-800 shadow-sm">
             <Download size={18} />
           </button>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-slate-50/50">
-                <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">ID</th>
-                <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Customer</th>
-                <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Amount</th>
-                <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Type</th>
-                <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Reason</th>
-                <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Date</th>
+              <tr className="bg-slate-50/50 dark:bg-slate-950/50 border-b border-slate-100 dark:border-slate-800">
+                <th className="px-8 py-5 text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Hex ID</th>
+                <th className="px-8 py-5 text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Identity Hub</th>
+                <th className="px-8 py-5 text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Mutation</th>
+                <th className="px-8 py-5 text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Protocol</th>
+                <th className="px-8 py-5 text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Audit Memo</th>
+                <th className="px-8 py-5 text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Timestamp</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y divide-slate-50 dark:divide-slate-800/50">
               {transactions.map(tx => (
-                <tr key={tx.id} className="hover:bg-slate-50/50">
-                  <td className="px-6 py-4 text-xs font-bold text-slate-400 font-mono">#{tx.id}</td>
-                  <td className="px-6 py-4 text-sm font-semibold text-slate-900">{tx.userName}</td>
-                  <td className="px-6 py-4">
-                    <span className={`text-sm font-bold font-mono ${tx.type === 'Credit' ? 'text-emerald-600' : 'text-rose-600'}`}>
+                <tr key={tx.id} className="hover:bg-slate-50/30 dark:hover:bg-slate-800/30 transition-all group">
+                  <td className="px-8 py-6 text-[10px] font-black text-slate-400 dark:text-slate-600 font-mono tracking-tighter group-hover:text-indigo-600">#{tx.id}</td>
+                  <td className="px-8 py-6 text-[0.9375rem] font-black text-slate-900 dark:text-white leading-tight">{tx.userName}</td>
+                  <td className="px-8 py-6">
+                    <span className={`text-base font-black font-mono transition-transform group-hover:scale-110 inline-block ${tx.type === 'Credit' ? 'text-emerald-500 dark:text-emerald-400' : 'text-rose-500 dark:text-rose-400'}`}>
                       {tx.type === 'Credit' ? '+' : '-'}₹{tx.amount.toFixed(2)}
                     </span>
                   </td>
-                  <td className="px-6 py-4">
-                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded-md uppercase tracking-wider ${tx.type === 'Credit' ? 'bg-emerald-50 text-emerald-700' : 'bg-rose-50 text-rose-700'}`}>
+                  <td className="px-8 py-6">
+                    <span className={`text-[9px] font-black px-3 py-1.5 rounded-xl uppercase tracking-[0.15em] border inline-flex items-center gap-1.5 ${tx.type === 'Credit' ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20' : 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20'}`}>
+                      <div className={`h-1.5 w-1.5 rounded-full ${tx.type === 'Credit' ? 'bg-emerald-500' : 'bg-rose-500'}`} />
                       {tx.type}
                     </span>
                   </td>
-                  <td className="px-6 py-4 text-sm text-slate-500">{tx.message}</td>
-                  <td className="px-6 py-4 text-sm text-slate-400">{tx.date}</td>
+                  <td className="px-8 py-6 text-xs font-bold text-slate-500 dark:text-slate-400 truncate max-w-xs">{tx.message}</td>
+                  <td className="px-8 py-6 text-[10px] font-black text-slate-400 dark:text-slate-600 uppercase tracking-widest">{tx.date}</td>
                 </tr>
               ))}
             </tbody>
